@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Archive Notes placeholder</title>
+  <desc id="desc">A grid of archival image placeholders.</desc>
+  <rect width="800" height="1000" fill="#e6e2d8"/>
+  <rect x="96" y="96" width="260" height="330" fill="#111"/>
+  <rect x="444" y="96" width="260" height="210" fill="#b0ada4"/>
+  <rect x="444" y="354" width="260" height="330" fill="#252521"/>
+  <rect x="96" y="474" width="260" height="210" fill="#c5beb0"/>
+  <rect x="96" y="732" width="608" height="172" fill="#111"/>
+  <circle cx="226" cy="261" r="72" fill="#f2f0ea"/>
+  <path d="M504 454h140M504 508h88M504 562h164" stroke="#f2f0ea" stroke-width="18"/>
+  <path d="M160 820h480" stroke="#f2f0ea" stroke-width="24"/>
+</svg>
