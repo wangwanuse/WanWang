@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Portrait Studies placeholder</title>
+  <desc id="desc">A monochrome portrait-style placeholder image.</desc>
+  <rect width="800" height="1000" fill="#d9d8d2"/>
+  <rect x="120" y="110" width="560" height="780" fill="#1d1d1b"/>
+  <circle cx="400" cy="390" r="155" fill="#ecebe6"/>
+  <path d="M245 895c16-185 87-286 155-286s139 101 155 286z" fill="#ecebe6"/>
+  <path d="M292 405c48-34 92-34 135 0M373 405c48-34 92-34 135 0" fill="none" stroke="#1d1d1b" stroke-width="18" stroke-linecap="round"/>
+  <path d="M400 432c-10 46-16 78-7 102" fill="none" stroke="#1d1d1b" stroke-width="12" stroke-linecap="round"/>
+  <path d="M337 575c42 24 86 24 126 0" fill="none" stroke="#1d1d1b" stroke-width="14" stroke-linecap="round"/>
+</svg>

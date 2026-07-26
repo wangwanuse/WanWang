@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Photography portfolio">
+    <title>Your Name - Photographer</title>
+    <link rel="stylesheet" href="css/main.css?v=3">
+  </head>
+  <body>
+    <div class="intro" aria-hidden="true">
+      <div class="intro__inner">
+        <strong>Your Name</strong>
+        <span>Photographer</span>
+      </div>
+    </div>
+
+    <main class="site-shell" aria-label="Photography portfolio">
+      <section class="viewer" aria-label="作品瀏覽">
+        <button class="viewer__hit viewer__hit--prev" type="button" aria-label="上一張作品" data-direction="prev"></button>
+        <figure class="viewer__figure">
+          <img id="active-image" src="images/work-portrait.svg" alt="Portrait Studies">
+        </figure>
+        <button class="viewer__hit viewer__hit--next" type="button" aria-label="下一張作品" data-direction="next"></button>
+
+        <p class="viewer__caption" id="active-caption">Recent - 1/16</p>
+      </section>
+
+      <aside class="index-panel" aria-label="作品索引" aria-hidden="true">
+        <nav class="index-panel__nav" aria-label="索引切換">
+          <button class="is-active" type="button" data-panel-tab="works">Works</button>
+          <button type="button" data-panel-tab="info">Info</button>
+          <a href="https://www.example.com/" target="_blank" rel="noreferrer">External</a>
+        </nav>
+
+        <div class="index-panel__section is-active" data-panel-section="works">
+          <ul class="work-index" id="work-index"></ul>
+        </div>
+
+        <div class="index-panel__section index-info" data-panel-section="info">
+          <p>Your Name is a photographer based in your city.</p>
+          <p>Represented by <a href="#">Studio / Agent</a></p>
+          <p>Print inquiries <a href="mailto:hello@example.com">hello@example.com</a></p>
+
+          <h2>Books</h2>
+          <p>2026 Personal Archive</p>
+          <p>2025 Portrait Studies</p>
+          <p>2024 Street Light</p>
+
+          <div class="index-info__links">
+            <a href="mailto:hello@example.com">Contact</a>
+            <span>-</span>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
+            <span>-</span>
+            <a href="https://vimeo.com/" target="_blank" rel="noreferrer">Motion</a>
+          </div>
+        </div>
+
+        <footer class="index-panel__footer">
+          <button type="button" data-close-panel>Close</button>
+          <span>1.1</span>
+        </footer>
+      </aside>
+
+      <section class="thumbs-overlay" aria-label="作品縮圖" aria-hidden="true">
+        <img class="thumbs-overlay__ghost" id="thumbs-ghost" src="images/work-portrait.svg" alt="">
+        <div class="thumbs-grid" id="thumbs-grid"></div>
+        <footer class="thumbs-overlay__footer">
+          <span id="thumbs-title">Recent</span>
+          <span aria-hidden="true"></span>
+          <button type="button" data-close-thumbs>Close</button>
+        </footer>
+      </section>
+    </main>
+
+    <footer class="bottom-nav" aria-label="瀏覽模式">
+      <button type="button" data-open-panel>Index</button>
+      <span aria-hidden="true"></span>
+      <button type="button" data-open-thumbs>Thumbs</button>
+    </footer>
+
+    <script src="js/main.js?v=3"></script>
+  </body>
+</html>
