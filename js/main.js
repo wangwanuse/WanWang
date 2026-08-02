@@ -1,37 +1,192 @@
-const works = [
-  { title: "Recent", count: 16, group: "portfolio" },
-  { title: "Work", count: 12, group: "portfolio" },
-  { title: "Work II", count: 15, group: "portfolio" },
-  { title: "Work III", count: 10, group: "portfolio" },
-  { title: "Work IV", count: 14, group: "portfolio" },
-  { title: "26 States", count: 18, group: "portfolio" },
-  { title: "Portrait Studies - 2026", count: 8, group: "projects" },
-  { title: "Street Light - 2025", count: 11, group: "projects" },
-  { title: "Archive Notes - 2024", count: 9, group: "projects" },
-  { title: "Commissioned Work - 2024", count: 15, group: "projects" },
-  { title: "Personal Work - 2023", count: 7, group: "projects" }
+//作品分類資料
+const works = [{
+    title: "Editorial",
+    count: 16,
+    group: "portfolio"
+  },
+  {
+    title: "Still life",
+    count: 5,
+    group: "portfolio"
+  },
+  {
+    title: "Lookbook",
+    count: 15,
+    group: "portfolio"
+  },
+  {
+    title: "Portrait",
+    count: 10,
+    group: "portfolio"
+  },
+  {
+    title: "Commercial",
+    count: 14,
+    group: "portfolio"
+  },
+  {
+    title: "Retouch",
+    count: 18,
+    group: "portfolio"
+  }
 ];
 
 const slides = [
-  { title: "Recent", image: "images/work-portrait.svg", alt: "Portrait Studies" },
-  { title: "Recent", image: "images/work-street.svg", alt: "Street Light" },
-  { title: "Recent", image: "images/work-archive.svg", alt: "Archive Notes" },
-  { title: "Recent", image: "images/work-commission.svg", alt: "Commissioned Work" },
-  { title: "Recent", image: "images/work-portrait.svg", alt: "Portrait Studies" },
-  { title: "Recent", image: "images/work-street.svg", alt: "Street Light" },
-  { title: "Recent", image: "images/work-archive.svg", alt: "Archive Notes" },
-  { title: "Recent", image: "images/work-commission.svg", alt: "Commissioned Work" },
-  { title: "Recent", image: "images/work-portrait.svg", alt: "Portrait Studies" },
-  { title: "Recent", image: "images/work-street.svg", alt: "Street Light" },
-  { title: "Recent", image: "images/work-archive.svg", alt: "Archive Notes" },
-  { title: "Recent", image: "images/work-commission.svg", alt: "Commissioned Work" },
-  { title: "Recent", image: "images/work-portrait.svg", alt: "Portrait Studies" },
-  { title: "Recent", image: "images/work-street.svg", alt: "Street Light" },
-  { title: "Recent", image: "images/work-archive.svg", alt: "Archive Notes" },
-  { title: "Recent", image: "images/work-commission.svg", alt: "Commissioned Work" }
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_01.jpg",
+    alt: "Editorial work 1"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_02.jpg",
+    alt: "Editorial work 2"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_03.jpg",
+    alt: "Editorial work 3"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_04.jpg",
+    alt: "Editorial work 4"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_05.jpg",
+    alt: "Editorial work 5"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_06.jpg",
+    alt: "Editorial work 6"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_07.jpg",
+    alt: "Editorial work 7"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_08.jpg",
+    alt: "Editorial work 8"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_09.jpg",
+    alt: "Editorial work 9"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_10.jpg",
+    alt: "Editorial work 10"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_11.jpg",
+    alt: "Editorial work 11"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_12.jpg",
+    alt: "Editorial work 12"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_13.jpg",
+    alt: "Editorial work 13"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_14.jpg",
+    alt: "Editorial work 14"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_15.jpg",
+    alt: "Editorial work 15"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_16.jpg",
+    alt: "Editorial work 16"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_17.jpg",
+    alt: "Editorial work 17"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_18.jpg",
+    alt: "Editorial work 18"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_19.jpg",
+    alt: "Editorial work 19"
+  },
+  {
+    title: "Editorial",
+    category: "Editorial",
+    image: "images/editorial/editorial_20.jpg",
+    alt: "Editorial work 20"
+  },
+
+  {
+    title: "Still life",
+    category: "Still life",
+    image: "images/still-life/still-life_01.jpg",
+    alt: "Still life work 1"
+  },
+  {
+    title: "Still life",
+    category: "Still life",
+    image: "images/still-life/still-life_02.jpg",
+    alt: "Still life work 2"
+  },
+  {
+    title: "Still life",
+    category: "Still life",
+    image: "images/still-life/still-life_03.jpg",
+    alt: "Still life work 3"
+  },
+  {
+    title: "Still life",
+    category: "Still life",
+    image: "images/still-life/still-life_04.jpg",
+    alt: "Still life work 4"
+  },
+  {
+    title: "Still life",
+    category: "Still life",
+    image: "images/still-life/still-life_05.jpg",
+    alt: "Still life work 5"
+  }
 ];
 
 let activeIndex = 0;
+let activeSlides = slides.filter((slide) => slide.category === "Editorial");
 
 const body = document.body;
 const activeImage = document.querySelector("#active-image");
@@ -44,18 +199,24 @@ const panel = document.querySelector(".index-panel");
 const thumbsOverlay = document.querySelector(".thumbs-overlay");
 const modalOverlay = document.querySelector(".modal-overlay");
 
+// 網址數字補成兩位
 function padNumber(number) {
   return String(number).padStart(2, "0");
 }
 
+// 產生圖片標題與頁碼
 function captionFor(index) {
-  const slide = slides[index];
-  return `${slide.title} - ${index + 1}/${slides.length}`;
+  const slide = activeSlides[index];
+  return `${slide.title} - ${index + 1}/${activeSlides.length}`;
 }
 
 function renderSlide(index) {
-  activeIndex = (index + slides.length) % slides.length;
-  const slide = slides[activeIndex];
+  if (activeSlides.length === 0) return;
+
+  activeIndex =
+    (index + activeSlides.length) % activeSlides.length;
+
+  const slide = activeSlides[activeIndex];
 
   activeImage.src = slide.image;
   activeImage.alt = slide.alt;
@@ -64,12 +225,22 @@ function renderSlide(index) {
   thumbsTitle.textContent = slide.title;
 
   document.querySelectorAll("[data-thumb]").forEach((button) => {
-    button.classList.toggle("is-active", Number(button.dataset.thumb) === activeIndex);
+    button.classList.toggle(
+      "is-active",
+      Number(button.dataset.thumb) === activeIndex
+    );
   });
 
-  window.history.replaceState(null, "", `#recent-${padNumber(activeIndex + 1)}`);
+  window.history.replaceState(
+    null,
+    "",
+    `#${slide.category
+      .toLowerCase()
+      .replaceAll(" ", "-")}-${padNumber(activeIndex + 1)}`
+  );
 }
 
+// 自動建立作品分類列表
 function renderWorkIndex() {
   let previousGroup = "";
   const fragment = document.createDocumentFragment();
@@ -93,8 +264,21 @@ function renderWorkIndex() {
     button.append(label, count);
     button.classList.toggle("is-active", index === 0);
     button.addEventListener("click", () => {
-      closePanel();
+      activeSlides = slides.filter(
+        (slide) => slide.category === work.title
+      );
+
+      activeIndex = 0;
+
+      document.querySelectorAll("#work-index button").forEach((workButton) => {
+        workButton.classList.remove("is-active");
+      });
+
+      button.classList.add("is-active");
+
+      renderThumbs();
       renderSlide(0);
+      closePanel();
     });
 
     item.append(button);
@@ -106,22 +290,31 @@ function renderWorkIndex() {
 }
 
 function renderThumbs() {
+  thumbsGrid.innerHTML = "";
+
   const fragment = document.createDocumentFragment();
 
-  slides.forEach((slide, index) => {
+  activeSlides.forEach((slide, index) => {
     const button = document.createElement("button");
     const image = document.createElement("img");
 
     button.type = "button";
     button.dataset.thumb = index;
-    button.setAttribute("aria-label", `${slide.title} ${index + 1}`);
+    button.setAttribute(
+      "aria-label",
+      `${slide.title} ${index + 1}`
+    );
+
     image.src = slide.image;
     image.alt = "";
+
     button.append(image);
+
     button.addEventListener("click", () => {
       renderSlide(index);
       closeThumbs();
     });
+
     fragment.append(button);
   });
 
