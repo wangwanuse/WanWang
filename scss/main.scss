@@ -80,25 +80,70 @@ img {
 
 .intro {
   @include cover-fixed(100);
-  display: grid;
-  place-items: center start;
-  padding-left: 10vw;
-  background: #000;
-  color: #fff;
-  transition: opacity 700ms $ease-main, visibility 700ms $ease-main;
+  overflow: hidden;
+  pointer-events: none;
 
-  &__inner {
+  &__content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     display: flex;
-    align-items: baseline;
-    gap: 48px;
+    align-items: center;
+    gap: 50px;
+    padding-left: 10vw;
+    color: #fff;
 
-    span {
-      color: rgba(#fff, 0.5);
+    h1,
+    h2 {
+      margin: 0;
+      font: inherit;
+      font-weight: 400;
+      line-height: 30px;
+      opacity: 0;
+      transform: translateY(0);
+      will-change: opacity, transform;
+    }
+
+    h1 {
+      transition: opacity 800ms ease, transform 650ms $ease-main;
+    }
+
+    h2 {
+      transition: opacity 800ms ease 350ms, transform 650ms $ease-main 250ms;
+    }
+
+    .is-intro-started & {
+      h1,
+      h2 {
+        opacity: 1;
+      }
+    }
+
+    .is-intro-text-exiting & {
+      h1,
+      h2 {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
     }
   }
 
-  .is-ready & {
-    opacity: 0;
+  &__background {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    background: #000;
+    transform: translateY(0);
+    transition: transform 900ms $ease-main;
+    will-change: transform;
+
+    .is-intro-background-exiting & {
+      transform: translateY(-100%);
+    }
+  }
+
+  .is-intro-finished & {
     visibility: hidden;
   }
 }
@@ -199,6 +244,14 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro,
+  .intro__content h1,
+  .intro__content h2,
+  .intro__background {
+    transition-duration: 1ms;
+    transition-delay: 0ms;
+  }
+
   .viewer__category-mask {
     transition-duration: 1ms;
   }
@@ -218,6 +271,14 @@ img {
   button {
     pointer-events: auto;
     @include hover-skew;
+  }
+
+  [data-open-panel] {
+    font-weight: 600;
+  }
+
+  .is-panel-open & [data-open-panel] {
+    font-weight: 600;
   }
 
   span {
@@ -474,14 +535,6 @@ img {
     font-size: 12px;
   }
 
-  .intro {
-    padding-left: 8vw;
-
-    &__inner {
-      gap: 24px;
-    }
-  }
-
   .viewer {
     display: flex;
     flex-direction: column;
@@ -525,11 +578,6 @@ img {
 }
 
 @media (max-width: $breakpoint-mobile) {
-  .intro__inner {
-    flex-direction: column;
-    gap: 4px;
-  }
-
   .thumbs-grid {
     grid-template-columns: repeat(3, minmax(54px, 1fr));
 

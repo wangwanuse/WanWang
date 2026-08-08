@@ -535,6 +535,22 @@ window.addEventListener("keydown", (event) => {
 renderWorkIndex();
 renderSlide(0);
 
-window.setTimeout(() => {
-  body.classList.add("is-ready");
-}, 1200);
+if (reduceMotion.matches) {
+  body.classList.add("is-intro-finished");
+} else {
+  window.requestAnimationFrame(() => {
+    body.classList.add("is-intro-started");
+  });
+
+  window.setTimeout(() => {
+    body.classList.add("is-intro-text-exiting");
+  }, 1650);
+
+  window.setTimeout(() => {
+    body.classList.add("is-intro-background-exiting");
+  }, 2200);
+
+  window.setTimeout(() => {
+    body.classList.add("is-intro-finished");
+  }, 3150);
+}

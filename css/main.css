@@ -56,29 +56,75 @@ img {
   position: fixed;
   inset: 0;
   z-index: 100;
-  display: -ms-grid;
-  display: grid;
-  place-items: center start;
-  padding-left: 10vw;
-  background: #000;
-  color: #fff;
-  -webkit-transition: opacity 700ms cubic-bezier(0.76, 0, 0.24, 1), visibility 700ms cubic-bezier(0.76, 0, 0.24, 1);
-  transition: opacity 700ms cubic-bezier(0.76, 0, 0.24, 1), visibility 700ms cubic-bezier(0.76, 0, 0.24, 1);
+  overflow: hidden;
+  pointer-events: none;
 }
-.intro__inner {
+.intro__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
-  gap: 48px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 50px;
+  padding-left: 10vw;
+  color: #fff;
 }
-.intro__inner span {
-  color: rgba(255, 255, 255, 0.5);
-}
-.is-ready .intro {
+.intro__content h1,
+.intro__content h2 {
+  margin: 0;
+  font: inherit;
+  font-weight: 400;
+  line-height: 30px;
   opacity: 0;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  will-change: opacity, transform;
+}
+.intro__content h1 {
+  -webkit-transition: opacity 800ms ease, -webkit-transform 650ms cubic-bezier(0.76, 0, 0.24, 1);
+  transition: opacity 800ms ease, -webkit-transform 650ms cubic-bezier(0.76, 0, 0.24, 1);
+  transition: opacity 800ms ease, transform 650ms cubic-bezier(0.76, 0, 0.24, 1);
+  transition: opacity 800ms ease, transform 650ms cubic-bezier(0.76, 0, 0.24, 1), -webkit-transform 650ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+.intro__content h2 {
+  -webkit-transition: opacity 800ms ease 350ms, -webkit-transform 650ms cubic-bezier(0.76, 0, 0.24, 1) 250ms;
+  transition: opacity 800ms ease 350ms, -webkit-transform 650ms cubic-bezier(0.76, 0, 0.24, 1) 250ms;
+  transition: opacity 800ms ease 350ms, transform 650ms cubic-bezier(0.76, 0, 0.24, 1) 250ms;
+  transition: opacity 800ms ease 350ms, transform 650ms cubic-bezier(0.76, 0, 0.24, 1) 250ms, -webkit-transform 650ms cubic-bezier(0.76, 0, 0.24, 1) 250ms;
+}
+.is-intro-started .intro__content h1,
+.is-intro-started .intro__content h2 {
+  opacity: 1;
+}
+.is-intro-text-exiting .intro__content h1,
+.is-intro-text-exiting .intro__content h2 {
+  opacity: 0;
+  -webkit-transform: translateY(-50px);
+          transform: translateY(-50px);
+}
+.intro__background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  background: #000;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  -webkit-transition: -webkit-transform 900ms cubic-bezier(0.76, 0, 0.24, 1);
+  transition: -webkit-transform 900ms cubic-bezier(0.76, 0, 0.24, 1);
+  transition: transform 900ms cubic-bezier(0.76, 0, 0.24, 1);
+  transition: transform 900ms cubic-bezier(0.76, 0, 0.24, 1), -webkit-transform 900ms cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.is-intro-background-exiting .intro__background {
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+}
+.is-intro-finished .intro {
   visibility: hidden;
 }
 
@@ -182,6 +228,15 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro,
+.intro__content h1,
+.intro__content h2,
+.intro__background {
+    -webkit-transition-duration: 1ms;
+            transition-duration: 1ms;
+    -webkit-transition-delay: 0ms;
+            transition-delay: 0ms;
+  }
   .viewer__category-mask {
     -webkit-transition-duration: 1ms;
             transition-duration: 1ms;
@@ -216,6 +271,12 @@ img {
 .bottom-nav button:hover {
   -webkit-transform: skewX(-7deg);
           transform: skewX(-7deg);
+}
+.bottom-nav [data-open-panel] {
+  font-weight: 600;
+}
+.is-panel-open .bottom-nav [data-open-panel] {
+  font-weight: 600;
 }
 .bottom-nav span {
   width: 22px;
@@ -521,12 +582,6 @@ img {
   body {
     font-size: 12px;
   }
-  .intro {
-    padding-left: 8vw;
-  }
-  .intro__inner {
-    gap: 24px;
-  }
   .viewer {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -570,13 +625,6 @@ img {
   }
 }
 @media (max-width: 560px) {
-  .intro__inner {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    gap: 4px;
-  }
   .thumbs-grid {
     -ms-grid-columns: (minmax(54px, 1fr))[3];
     grid-template-columns: repeat(3, minmax(54px, 1fr));
