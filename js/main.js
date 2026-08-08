@@ -206,69 +206,63 @@ const slides = [
   {
     title: "Portrait",
     category: "Portrait",
-    image: "images/portrait/Portrait_01.jpg",
+    image: "images/portrait/portrait_01.jpg",
     alt: "Portrait work 1"
   },
   {
     title: "Portrait",
     category: "Portrait",
-    image: "images/portrait/Portrait_02.jpg",
+    image: "images/portrait/portrait_02.jpg",
     alt: "Portrait work 2"
   },
 
   {
     title: "Commercial",
     category: "Commercial",
-    image: "images/commercial/commercial_01.jpg",
+    image: "images/commercial/editorial_01.jpg",
     alt: "Commercial work 1"
   },
   {
     title: "Commercial",
     category: "Commercial",
-    image: "images/commercial/commercial_02.jpg",
+    image: "images/commercial/editorial_02.jpg",
     alt: "Commercial work 2"
   },
   {
     title: "Commercial",
     category: "Commercial",
-    image: "images/commercial/commercial_03.jpg",
+    image: "images/commercial/editorial_03.jpg",
     alt: "Commercial work 3"
   },
   {
     title: "Commercial",
     category: "Commercial",
-    image: "images/commercial/commercial_04.jpg",
+    image: "images/commercial/editorial_04.jpg",
     alt: "Commercial work 4"
   },
   {
     title: "Commercial",
     category: "Commercial",
-    image: "images/commercial/commercial_05.jpg",
+    image: "images/commercial/editorial_05.jpg",
     alt: "Commercial work 5"
   },
   {
     title: "Commercial",
     category: "Commercial",
-    image: "images/commercial/commercial_06.jpg",
+    image: "images/commercial/editorial_06.JPG",
     alt: "Commercial work 6"
   },
   {
     title: "Commercial",
     category: "Commercial",
-    image: "images/commercial/commercial_07.jpg",
-    alt: "Commercial work 7"
-  },
-
-   {
-    title: "Commercial",
-    category: "Commercial",
-    image: "images/commercial/commercial_07.jpg",
+    image: "images/commercial/editorial_07.jpg",
     alt: "Commercial work 7"
   },
 ];
 
 let activeIndex = 0;
-let activeSlides = slides.filter((slide) => slide.category === "Editorial");
+// 首頁依分類順序瀏覽所有作品；從 Index 選分類後才只看該分類。
+let activeSlides = slides;
 
 const body = document.body;
 const activeImage = document.querySelector("#active-image");
@@ -298,7 +292,12 @@ function padNumber(number) {
 // 產生圖片標題與頁碼
 function captionFor(index) {
   const slide = activeSlides[index];
-  return `${slide.title} - ${index + 1}/${activeSlides.length}`;
+  const categorySlides = activeSlides.filter(
+    (item) => item.category === slide.category
+  );
+  const categoryIndex = categorySlides.indexOf(slide);
+
+  return `${slide.title} - ${categoryIndex + 1}/${categorySlides.length}`;
 }
 
 function renderSlide(index) {
@@ -308,6 +307,9 @@ function renderSlide(index) {
     (index + activeSlides.length) % activeSlides.length;
 
   const slide = activeSlides[activeIndex];
+  const categoryIndex = activeSlides
+    .filter((item) => item.category === slide.category)
+    .indexOf(slide);
 
   activeImage.src = slide.image;
   activeImage.alt = slide.alt;
@@ -327,7 +329,7 @@ function renderSlide(index) {
     "",
     `#${slide.category
       .toLowerCase()
-      .replaceAll(" ", "-")}-${padNumber(activeIndex + 1)}`
+      .replaceAll(" ", "-")}-${padNumber(categoryIndex + 1)}`
   );
 }
 
