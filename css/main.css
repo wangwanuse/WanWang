@@ -115,9 +115,11 @@ img {
 }
 
 .viewer__figure {
+  position: relative;
   width: auto;
   max-width: 88vw;
   margin: 0;
+  overflow: hidden;
   -webkit-transition: opacity 240ms ease;
   transition: opacity 240ms ease;
 }
@@ -132,6 +134,42 @@ img {
      object-fit: contain;
 }
 
+.viewer__category-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  background: var(--color-bg);
+  -webkit-transform: translateY(100%);
+          transform: translateY(100%);
+  -webkit-transition: -webkit-transform 520ms var(--ease);
+  transition: -webkit-transform 520ms var(--ease);
+  transition: transform 520ms var(--ease);
+  transition: transform 520ms var(--ease), -webkit-transform 520ms var(--ease);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.viewer__category-mask.is-covering {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.viewer__category-mask.is-revealing {
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+}
+
+.viewer.is-category-transitioning .viewer__caption {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewer__category-mask {
+    -webkit-transition-duration: 1ms;
+            transition-duration: 1ms;
+  }
+}
 .viewer__caption {
   position: fixed;
   left: var(--cursor-x, 50%);
@@ -274,7 +312,7 @@ img {
 
 .index-panel__nav .is-active {
   text-decoration-line: underline;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .index-panel__section {

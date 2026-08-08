@@ -275,6 +275,11 @@ const panel = document.querySelector(".index-panel");
 const thumbsOverlay = document.querySelector(".thumbs-overlay");
 const modalOverlay = document.querySelector(".modal-overlay");
 const viewer = document.querySelector(".viewer");
+const categoryMask = document.querySelector(".viewer__category-mask");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const categoryTransitionDuration = 540;
+let displayedSlide = activeSlides[0];
+let isCategoryTransitioning = false;
 
 // 桌機版讓作品名稱與頁碼跟隨滑鼠位置
 viewer.addEventListener("pointermove", (event) => {
@@ -300,11 +305,8 @@ function captionFor(index) {
   return `${slide.title} - ${categoryIndex + 1}/${categorySlides.length}`;
 }
 
-function renderSlide(index) {
-  if (activeSlides.length === 0) return;
-
-  activeIndex =
-    (index + activeSlides.length) % activeSlides.length;
+function applySlide(index) {
+  activeIndex = index;
 
   const slide = activeSlides[activeIndex];
   const categoryIndex = activeSlides
@@ -316,6 +318,7 @@ function renderSlide(index) {
   activeCaption.textContent = captionFor(activeIndex);
   thumbsGhost.src = slide.image;
   thumbsTitle.textContent = slide.title;
+  displayedSlide = slide;
 
   document.querySelectorAll("[data-thumb]").forEach((button) => {
     button.classList.toggle(
@@ -331,6 +334,47 @@ function renderSlide(index) {
       .toLowerCase()
       .replaceAll(" ", "-")}-${padNumber(categoryIndex + 1)}`
   );
+}
+
+function waitForCategoryMask() {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, categoryTransitionDuration);
+  });
+}
+
+async function renderSlide(index) {
+  if (activeSlides.length === 0) return;
+  if (isCategoryTransitioning) return;
+
+  const nextIndex =
+    (index + activeSlides.length) % activeSlides.length;
+  const nextSlide = activeSlides[nextIndex];
+  const changesCategory =
+    displayedSlide && displayedSlide.category !== nextSlide.category;
+
+  if (!changesCategory || reduceMotion.matches) {
+    applySlide(nextIndex);
+    return;
+  }
+
+  isCategoryTransitioning = true;
+  viewer.classList.add("is-category-transitioning");
+  categoryMask.classList.add("is-covering");
+
+  await waitForCategoryMask();
+  applySlide(nextIndex);
+
+  categoryMask.classList.remove("is-covering");
+  categoryMask.classList.add("is-revealing");
+
+  await waitForCategoryMask();
+
+  categoryMask.style.transition = "none";
+  categoryMask.classList.remove("is-revealing");
+  categoryMask.getBoundingClientRect();
+  categoryMask.style.transition = "";
+  viewer.classList.remove("is-category-transitioning");
+  isCategoryTransitioning = false;
 }
 
 // 自動建立作品分類列表
