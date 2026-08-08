@@ -1,32 +1,26 @@
 //作品分類資料
 const works = [{
     title: "Editorial",
-    count: 16,
     group: "portfolio"
   },
   {
     title: "Still life",
-    count: 5,
     group: "portfolio"
   },
   {
     title: "Lookbook",
-    count: 15,
     group: "portfolio"
   },
   {
     title: "Portrait",
-    count: 10,
     group: "portfolio"
   },
   {
     title: "Commercial",
-    count: 14,
     group: "portfolio"
   },
   {
     title: "Retouch",
-    count: 18,
     group: "portfolio"
   }
 ];
@@ -198,6 +192,15 @@ const thumbsGrid = document.querySelector("#thumbs-grid");
 const panel = document.querySelector(".index-panel");
 const thumbsOverlay = document.querySelector(".thumbs-overlay");
 const modalOverlay = document.querySelector(".modal-overlay");
+const viewer = document.querySelector(".viewer");
+
+// 桌機版讓作品名稱與頁碼跟隨滑鼠位置
+viewer.addEventListener("pointermove", (event) => {
+  if (event.pointerType === "touch") return;
+
+  viewer.style.setProperty("--cursor-x", `${event.clientX}px`);
+  viewer.style.setProperty("--cursor-y", `${event.clientY}px`);
+});
 
 // 網址數字補成兩位
 function padNumber(number) {
@@ -245,7 +248,7 @@ function renderWorkIndex() {
   let previousGroup = "";
   const fragment = document.createDocumentFragment();
 
-  works.forEach((work, index) => {
+  works.forEach((work) => {
     if (previousGroup && previousGroup !== work.group) {
       const spacer = document.createElement("li");
       spacer.className = "work-index__spacer";
@@ -257,16 +260,21 @@ function renderWorkIndex() {
     const button = document.createElement("button");
     const label = document.createElement("span");
     const count = document.createElement("span");
+    const workSlides = slides.filter(
+      (slide) => slide.category === work.title
+    );
 
     label.textContent = work.title;
-    count.textContent = work.count;
+    count.textContent = workSlides.length;
     button.type = "button";
     button.append(label, count);
-    button.classList.toggle("is-active", index === 0);
+    button.disabled = workSlides.length === 0;
+    button.classList.toggle(
+      "is-active",
+      work.title === activeSlides[0]?.category
+    );
     button.addEventListener("click", () => {
-      activeSlides = slides.filter(
-        (slide) => slide.category === work.title
-      );
+      activeSlides = workSlides;
 
       activeIndex = 0;
 
