@@ -280,6 +280,7 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const categoryTransitionDuration = 540;
 let displayedSlide = activeSlides[0];
 let isCategoryTransitioning = false;
+let hasRenderedThumbs = false;
 
 // 桌機版讓作品名稱與頁碼跟隨滑鼠位置
 viewer.addEventListener("pointermove", (event) => {
@@ -418,7 +419,7 @@ function renderWorkIndex() {
 
       button.classList.add("is-active");
 
-      renderThumbs();
+      if (hasRenderedThumbs) renderThumbs();
       renderSlide(0);
       closePanel();
     });
@@ -448,7 +449,9 @@ function renderThumbs() {
     );
 
     image.src = slide.image;
-    image.alt = "";
+image.alt = "";
+image.loading = "lazy";
+image.decoding = "async";
 
     button.append(image);
 
@@ -461,6 +464,7 @@ function renderThumbs() {
   });
 
   thumbsGrid.append(fragment);
+  hasRenderedThumbs = true;
 }
 
 function openPanel() {
@@ -478,6 +482,7 @@ function closePanel() {
 
 function openThumbs() {
   closePanel();
+  if (!hasRenderedThumbs) renderThumbs();
   body.classList.add("is-thumbs-open");
   body.classList.add("is-modal-open");
   thumbsOverlay.setAttribute("aria-hidden", "false");
@@ -528,7 +533,6 @@ window.addEventListener("keydown", (event) => {
 });
 
 renderWorkIndex();
-renderThumbs();
 renderSlide(0);
 
 window.setTimeout(() => {

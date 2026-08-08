@@ -539,7 +539,8 @@ img {
   }
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none),
+(pointer: coarse) {
   .viewer {
     display: flex;
     flex-direction: column;
