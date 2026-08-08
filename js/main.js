@@ -176,7 +176,95 @@ const slides = [
     category: "Still life",
     image: "images/still-life/still-life_05.jpg",
     alt: "Still life work 5"
-  }
+  },
+
+  {
+    title: "Lookbook",
+    category: "Lookbook",
+    image: "images/lookbook/lookbook_01.jpg",
+    alt: "Look book work 1"
+  },
+  {
+    title: "Lookbook",
+    category: "Lookbook",
+    image: "images/lookbook/lookbook_02.jpg",
+    alt: "Look book work 2"
+  },
+  {
+    title: "Lookbook",
+    category: "Lookbook",
+    image: "images/lookbook/lookbook_03.jpg",
+    alt: "Look book work 3"
+  },
+  {
+    title: "Lookbook",
+    category: "Lookbook",
+    image: "images/lookbook/lookbook_04.jpg",
+    alt: "Look book work 4"
+  },
+
+  {
+    title: "Portrait",
+    category: "Portrait",
+    image: "images/portrait/Portrait_01.jpg",
+    alt: "Portrait work 1"
+  },
+  {
+    title: "Portrait",
+    category: "Portrait",
+    image: "images/portrait/Portrait_02.jpg",
+    alt: "Portrait work 2"
+  },
+
+  {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_01.jpg",
+    alt: "Commercial work 1"
+  },
+  {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_02.jpg",
+    alt: "Commercial work 2"
+  },
+  {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_03.jpg",
+    alt: "Commercial work 3"
+  },
+  {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_04.jpg",
+    alt: "Commercial work 4"
+  },
+  {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_05.jpg",
+    alt: "Commercial work 5"
+  },
+  {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_06.jpg",
+    alt: "Commercial work 6"
+  },
+  {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_07.jpg",
+    alt: "Commercial work 7"
+  },
+
+   {
+    title: "Commercial",
+    category: "Commercial",
+    image: "images/commercial/commercial_07.jpg",
+    alt: "Commercial work 7"
+  },
 ];
 
 let activeIndex = 0;

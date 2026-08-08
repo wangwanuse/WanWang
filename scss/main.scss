@@ -241,6 +241,7 @@ img {
 
 .index-panel__nav .is-active {
   text-decoration-line: underline;
+  font-weight: 800;
 }
 
 .index-panel__section {
@@ -275,9 +276,6 @@ img {
   text-align: left;
 }
 
-.work-index button.is-active span:first-child {
-  text-decoration-line: underline;
-}
 
 .work-index button:disabled {
   color: var(--color-muted);
