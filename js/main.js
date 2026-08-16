@@ -306,8 +306,20 @@ function captionFor(index) {
   return `${slide.title} - ${categoryIndex + 1}/${categorySlides.length}`;
 }
 
+// 目前作品顯示後，只在背景準備下一張，避免一開始下載全部作品。
+function preloadNextSlide(index) {
+  if (activeSlides.length < 2) return;
+
+  const nextIndex = (index + 1) % activeSlides.length;
+  const nextImage = new Image();
+  nextImage.decoding = "async";
+  nextImage.fetchPriority = "low";
+  nextImage.src = activeSlides[nextIndex].image;
+}
+
 function applySlide(index) {
   activeIndex = index;
+  const appliedIndex = activeIndex;
 
   const slide = activeSlides[activeIndex];
   const categoryIndex = activeSlides
@@ -320,6 +332,16 @@ function applySlide(index) {
   thumbsGhost.src = slide.image;
   thumbsTitle.textContent = slide.title;
   displayedSlide = slide;
+
+  if (activeImage.complete) {
+    preloadNextSlide(appliedIndex);
+  } else {
+    activeImage.addEventListener(
+      "load",
+      () => preloadNextSlide(appliedIndex),
+      { once: true }
+    );
+  }
 
   document.querySelectorAll("[data-thumb]").forEach((button) => {
     button.classList.toggle(
@@ -533,6 +555,16 @@ window.addEventListener("keydown", (event) => {
 });
 
 renderWorkIndex();
+
+// 首張圖片開始下載後，後續輪播圖片恢復一般下載優先度。
+activeImage.addEventListener(
+  "load",
+  () => {
+    activeImage.fetchPriority = "auto";
+  },
+  { once: true }
+);
+
 renderSlide(0);
 
 if (reduceMotion.matches) {
@@ -540,13 +572,13 @@ if (reduceMotion.matches) {
 } else {
   window.setTimeout(() => {
     body.classList.add("is-intro-sweeping");
-  }, 1650);
+  }, 1100);
 
   window.setTimeout(() => {
     body.classList.add("is-intro-base-cleared");
-  }, 2440);
+  }, 1750);
 
   window.setTimeout(() => {
     body.classList.add("is-intro-finished");
-  }, 3000);
+  }, 2200);
 }

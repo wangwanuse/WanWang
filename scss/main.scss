@@ -146,15 +146,15 @@ img {
 
     .is-intro-sweeping & {
       &--dark {
-        animation: intro-panel-sweep 1100ms $ease-main 0ms both;
+        animation: intro-panel-sweep 850ms $ease-main 0ms both;
       }
 
       &--gray {
-        animation: intro-panel-sweep 1100ms $ease-main 120ms both;
+        animation: intro-panel-sweep 850ms $ease-main 90ms both;
       }
 
       &--light {
-        animation: intro-panel-sweep 1100ms $ease-main 240ms both;
+        animation: intro-panel-sweep 850ms $ease-main 180ms both;
       }
     }
   }
