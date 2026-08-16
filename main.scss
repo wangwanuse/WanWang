@@ -1,4 +1,4 @@
-$color-bg: #f7f7f4;
+$color-bg: #ffffff;
 $color-text: #101010;
 $color-muted: #777;
 $ease-main: cubic-bezier(0.76, 0, 0.24, 1);
@@ -50,9 +50,9 @@ body {
   overflow: hidden;
   background: $color-bg;
   color: $color-text;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 13px;
-  line-height: 1.45;
+  line-height: 1.85;
 }
 
 button,
@@ -80,26 +80,97 @@ img {
 
 .intro {
   @include cover-fixed(100);
-  display: grid;
-  place-items: center start;
-  padding-left: 10vw;
-  background: #000;
-  color: #fff;
-  transition: opacity 700ms $ease-main, visibility 700ms $ease-main;
+  overflow: hidden;
+  pointer-events: none;
 
-  &__inner {
+  &__base {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    background: #000;
+
+    .is-intro-base-cleared & {
+      visibility: hidden;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 48px;
+    padding-left: 10vw;
+    color: #fff;
+    opacity: 1;
+    transition: opacity 260ms ease, transform 360ms $ease-main;
+
+    strong,
+    span {
+      font-weight: 400;
+    }
 
     span {
       color: rgba(#fff, 0.5);
     }
+
+    .is-intro-sweeping & {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
   }
 
-  .is-ready & {
-    opacity: 0;
+  &__panel {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform: translateY(105%);
+    will-change: transform;
+
+    &--dark {
+      z-index: 1;
+      background: $color-text;
+    }
+
+    &--gray {
+      z-index: 2;
+      background: $color-muted;
+    }
+
+    &--light {
+      z-index: 3;
+      background: $color-bg;
+    }
+
+    .is-intro-sweeping & {
+      &--dark {
+        animation: intro-panel-sweep 850ms $ease-main 0ms both;
+      }
+
+      &--gray {
+        animation: intro-panel-sweep 850ms $ease-main 90ms both;
+      }
+
+      &--light {
+        animation: intro-panel-sweep 850ms $ease-main 180ms both;
+      }
+    }
+  }
+
+  .is-intro-finished & {
     visibility: hidden;
+  }
+}
+
+@keyframes intro-panel-sweep {
+  0% {
+    transform: translateY(105%);
+  }
+
+  100% {
+    transform: translateY(-105%);
   }
 }
 
@@ -199,6 +270,16 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
+  .intro,
+  .intro__base,
+  .intro__content,
+  .intro__panel {
+    animation: none;
+    transition-duration: 1ms;
+    transition-delay: 0ms;
+  }
+
   .viewer__category-mask {
     transition-duration: 1ms;
   }
@@ -482,14 +563,6 @@ img {
     font-size: 12px;
   }
 
-  .intro {
-    padding-left: 8vw;
-
-    &__inner {
-      gap: 24px;
-    }
-  }
-
   .viewer {
     display: flex;
     flex-direction: column;
@@ -533,11 +606,6 @@ img {
 }
 
 @media (max-width: $breakpoint-mobile) {
-  .intro__inner {
-    flex-direction: column;
-    gap: 4px;
-  }
-
   .thumbs-grid {
     grid-template-columns: repeat(3, minmax(54px, 1fr));
 
