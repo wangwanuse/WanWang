@@ -89,9 +89,11 @@ img {
     z-index: 0;
     display: block;
     background: #000;
+    opacity: 1;
+    transition: opacity 120ms linear;
 
     .is-intro-base-cleared & {
-      visibility: hidden;
+      opacity: 0;
     }
   }
 
