@@ -282,14 +282,6 @@ let displayedSlide = activeSlides[0];
 let isCategoryTransitioning = false;
 let hasRenderedThumbs = false;
 
-// 桌機版讓作品名稱與頁碼跟隨滑鼠位置
-viewer.addEventListener("pointermove", (event) => {
-  if (event.pointerType === "touch") return;
-
-  viewer.style.setProperty("--cursor-x", `${event.clientX}px`);
-  viewer.style.setProperty("--cursor-y", `${event.clientY}px`);
-});
-
 // 網址數字補成兩位
 function padNumber(number) {
   return String(number).padStart(2, "0");
