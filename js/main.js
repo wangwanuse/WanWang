@@ -568,9 +568,9 @@ if (reduceMotion.matches) {
 
   window.setTimeout(() => {
     body.classList.add("is-intro-base-cleared");
-  }, 1680);
+  }, 1705);
 
   window.setTimeout(() => {
     body.classList.add("is-intro-finished");
-  }, 2200);
+  }, 2140);
 }

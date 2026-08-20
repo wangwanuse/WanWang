@@ -65,12 +65,9 @@ img {
   z-index: 0;
   display: block;
   background: #000;
-  opacity: 1;
-  -webkit-transition: opacity 120ms linear;
-  transition: opacity 120ms linear;
 }
 .is-intro-base-cleared .intro__base {
-  opacity: 0;
+  visibility: hidden;
 }
 .intro__content {
   position: absolute;
