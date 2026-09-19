@@ -53,6 +53,18 @@ img {
   max-width: 100%;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}
+
 .intro {
   position: fixed;
   inset: 0;
@@ -852,7 +864,6 @@ img {
     bottom: 0;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .viewer,
   .viewer__figure,
