@@ -110,6 +110,7 @@ const categoryTransitionDuration = 540;
 let displayedSlide = activeSlides[0];
 let isCategoryTransitioning = false;
 let hasRenderedThumbs = false;
+let isSelectingThumb = false;
 
 // THUMBS 專用：保留原始子資料夾結構，並改用 600px WebP 縮圖。
 function thumbPath(imagePath) {
@@ -117,6 +118,25 @@ function thumbPath(imagePath) {
     /^images\/(?!thumbs\/)(.+)\.(?:jpe?g|png)$/i,
     "images/thumbs/$1.webp"
   );
+}
+
+// 手機關閉 THUMBS 前，先讓所選原圖完成載入與解碼，避免短暫露出上一張。
+function prepareSlideImage(imagePath) {
+  return new Promise((resolve) => {
+    const image = new Image();
+
+    image.decoding = "async";
+    image.onload = async () => {
+      try {
+        await image.decode();
+      } catch {
+        // 圖片已完成載入時，即使 decode() 不支援或失敗仍可繼續顯示。
+      }
+      resolve();
+    };
+    image.onerror = resolve;
+    image.src = imagePath;
+  });
 }
 
 // 網址數字補成兩位
@@ -384,9 +404,18 @@ function renderThumbs() {
 
     button.append(image);
 
-    button.addEventListener("click", () => {
-      renderSlide(index);
-      closeThumbs();
+    button.addEventListener("click", async () => {
+      if (isSelectingThumb) return;
+
+      isSelectingThumb = true;
+
+      try {
+        await prepareSlideImage(slide.image);
+        await renderSlide(index);
+        closeThumbs();
+      } finally {
+        isSelectingThumb = false;
+      }
     });
 
     fragment.append(button);
