@@ -4,12 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="WanWang — Photographer based in Taipei.">
+  <meta name="description" content="WanWang — Taiwanese photographer and art director based in London.">
+  <link rel="canonical" href="https://wan-wang.vercel.app/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="WanWang">
   <meta property="og:title" content="WanWang — Photographer">
-  <meta property="og:description" content="Photography portfolio by WanWang.">
+  <meta property="og:description" content="WanWang — Taiwanese photographer and art director based in London.">
   <meta property="og:url" content="https://wan-wang.vercel.app/">
   <meta property="og:image" content="https://wan-wang.vercel.app/images/og-image_1200x630.jpg?v=2">
   <meta property="og:image:secure_url" content="https://wan-wang.vercel.app/images/og-image_1200x630.jpg?v=2">
@@ -21,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="WanWang — Photographer">
-  <meta name="twitter:description" content="Photography portfolio by WanWang.">
+  <meta name="twitter:description" content="WanWang — Taiwanese photographer and art director based in London.">
   <meta name="twitter:image" content="https://wan-wang.vercel.app/images/og-image_1200x630.jpg?v=2">
   <title>WanWang</title>
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -109,7 +110,8 @@
       </footer>
     </aside>
 
-    <section class="thumbs-overlay" aria-label="作品縮圖" aria-hidden="true">
+    <section class="thumbs-overlay" role="dialog" aria-modal="true" aria-labelledby="thumbs-title"
+      aria-hidden="true" inert>
       <img class="thumbs-overlay__ghost" id="thumbs-ghost" alt="" decoding="async">
       <div class="thumbs-grid" id="thumbs-grid"></div>
       <footer class="thumbs-overlay__footer">
@@ -126,7 +128,7 @@
     <button type="button" data-open-thumbs>Thumbs</button>
   </footer>
 
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=12"></script>
 </body>
 
 </html>

@@ -608,9 +608,7 @@ function openThumbs() {
   body.classList.add("is-thumbs-open");
   body.classList.add("is-modal-open");
   thumbsOverlay.setAttribute("aria-hidden", "false");
-  window.requestAnimationFrame(() => {
-    thumbsOverlay.querySelector(".thumbs-overlay__title")?.focus();
-  });
+  thumbsTitle.focus({ preventScroll: true });
 }
 
 function closeThumbs(restoreFocus = true) {
