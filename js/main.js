@@ -167,7 +167,7 @@ function syncWorkIndexActive(slide) {
   });
 }
 
-function applySlide(index) {
+function applySlide(index, updateUrl = true) {
   activeIndex = index;
   const appliedIndex = activeIndex;
 
@@ -205,13 +205,15 @@ function applySlide(index) {
     );
   });
 
-  window.history.replaceState(
-    null,
-    "",
-    `#${slide.category
-      .toLowerCase()
-      .replaceAll(" ", "-")}-${padNumber(categoryIndex + 1)}`
-  );
+  if (updateUrl) {
+    window.history.replaceState(
+      null,
+      "",
+      `#${slide.category
+        .toLowerCase()
+        .replaceAll(" ", "-")}-${padNumber(categoryIndex + 1)}`
+    );
+  }
 }
 
 function waitForCategoryMask() {
@@ -220,7 +222,7 @@ function waitForCategoryMask() {
   });
 }
 
-async function renderSlide(index) {
+async function renderSlide(index, updateUrl = true) {
   if (activeSlides.length === 0) return;
   if (isCategoryTransitioning) return;
 
@@ -247,7 +249,7 @@ async function renderSlide(index) {
     displayedSlide && groupKey(displayedSlide) !== groupKey(nextSlide);
 
   if (!changesCategory || reduceMotion.matches) {
-    applySlide(nextIndex);
+    applySlide(nextIndex, updateUrl);
     return;
   }
 
@@ -257,7 +259,7 @@ async function renderSlide(index) {
 
   try {
     await waitForCategoryMask();
-    applySlide(nextIndex);
+    applySlide(nextIndex, updateUrl);
 
     categoryMask.classList.remove("is-covering");
     categoryMask.classList.add("is-revealing");
@@ -483,7 +485,8 @@ activeImage.addEventListener(
   { once: true }
 );
 
-renderSlide(0);
+// 首頁初次載入保留乾淨網址；使用者開始瀏覽後才加入作品位置。
+renderSlide(0, false);
 
 if (reduceMotion.matches) {
   body.classList.add("is-intro-finished");
