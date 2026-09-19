@@ -5,9 +5,9 @@ const works = [
   {
     title: "Editorial",
     projects: [
-      "2026-texture", "2025-Appearance anxiety", "2025-女の人",
-      "2024-Mimicry", "2024-strange", "2024-the room",
-      "Elegant Battle", "klimt", "taiwan's summer"
+      "2026-Texture", "2025-Appearance anxiety", "2025-女の人",
+      "2024-Mimicry", "2024-strange", "2024-The room",
+      "Elegant Battle", "Klimt", "Taiwan's summer"
     ]
   },
   { title: "Still life" },
@@ -101,6 +101,9 @@ const panel = document.querySelector(".index-panel");
 const thumbsOverlay = document.querySelector(".thumbs-overlay");
 const modalOverlay = document.querySelector(".modal-overlay");
 const viewer = document.querySelector(".viewer");
+const bottomNav = document.querySelector(".bottom-nav");
+const openPanelButton = document.querySelector("[data-open-panel]");
+const openThumbsButton = document.querySelector("[data-open-thumbs]");
 const viewerCursor = document.querySelector("#viewer-cursor");
 const viewerCursorCategory = viewerCursor.querySelector(".viewer__cursor-category");
 const viewerCursorCount = viewerCursor.querySelector(".viewer__cursor-count");
@@ -111,6 +114,11 @@ let displayedSlide = activeSlides[0];
 let isCategoryTransitioning = false;
 let hasRenderedThumbs = false;
 let isSelectingThumb = false;
+let renderedThumbGroup = null;
+let panelReturnFocus = null;
+let thumbsReturnFocus = null;
+let historyRestoreScheduled = false;
+let categoryTransitionSequence = 0;
 
 // THUMBS 專用：保留原始子資料夾結構，並改用 600px WebP 縮圖。
 function thumbPath(imagePath) {
@@ -144,6 +152,54 @@ function padNumber(number) {
   return String(number).padStart(2, "0");
 }
 
+function slugForSlide(slide) {
+  return groupKey(slide)
+    .toLowerCase()
+    .replace(/[’']/g, "")
+    .replace(/\s+/g, "-");
+}
+
+function hashForSlide(slide) {
+  const groupSlides = slidesForGroup(slide);
+  return `#${slugForSlide(slide)}-${padNumber(groupSlides.indexOf(slide) + 1)}`;
+}
+
+function routeFromHash(hash) {
+  if (!hash) return null;
+
+  let decodedHash;
+
+  try {
+    decodedHash = decodeURIComponent(hash.slice(1)).toLowerCase();
+  } catch {
+    return null;
+  }
+
+  const match = decodedHash.match(/^(.+)-(\d+)$/);
+  if (!match) return null;
+
+  const [, slug, numberText] = match;
+  const number = Number(numberText);
+  let routeSlides = slides.filter((slide) => slugForSlide(slide) === slug);
+
+  // 相容先前可能分享出去的 #editorial-N 分類網址。
+  if (routeSlides.length === 0) {
+    routeSlides = slides.filter(
+      (slide) => slide.category.toLowerCase().replace(/\s+/g, "-") === slug
+    );
+  }
+
+  const slide = routeSlides[number - 1];
+  if (!slide) return null;
+
+  const groupSlides = slidesForGroup(slide);
+  return {
+    slide,
+    slides: groupSlides,
+    index: groupSlides.indexOf(slide)
+  };
+}
+
 // 產生圖片標題與頁碼
 function captionFor(index) {
   const slide = activeSlides[index];
@@ -175,19 +231,23 @@ function groupKey(slide) {
   return slide.project || slide.category;
 }
 
+function sameGroupName(first, second) {
+  return first?.toLocaleLowerCase() === second?.toLocaleLowerCase();
+}
+
 function slidesForGroup(slide) {
   return slides.filter((item) => groupKey(item) === groupKey(slide));
 }
 
 function syncWorkIndexActive(slide) {
   document.querySelectorAll("#work-index button").forEach((button) => {
-    const matchesProject = slide.project && button.dataset.project === slide.project;
-    const matchesCategory = !slide.project && button.dataset.category === slide.category;
+    const matchesProject = slide.project && sameGroupName(button.dataset.project, slide.project);
+    const matchesCategory = !slide.project && sameGroupName(button.dataset.category, slide.category);
     button.classList.toggle("is-active", Boolean(matchesProject || matchesCategory));
   });
 }
 
-function applySlide(index, updateUrl = true) {
+function applySlide(index, historyMode = "push") {
   activeIndex = index;
   const appliedIndex = activeIndex;
 
@@ -225,14 +285,16 @@ function applySlide(index, updateUrl = true) {
     );
   });
 
-  if (updateUrl) {
-    window.history.replaceState(
-      null,
-      "",
-      `#${slide.category
-        .toLowerCase()
-        .replaceAll(" ", "-")}-${padNumber(categoryIndex + 1)}`
-    );
+  if (historyMode !== "none") {
+    const nextHash = hashForSlide(slide);
+
+    if (window.location.hash !== nextHash) {
+      window.history[historyMode === "replace" ? "replaceState" : "pushState"](
+        null,
+        "",
+        nextHash
+      );
+    }
   }
 }
 
@@ -242,7 +304,7 @@ function waitForCategoryMask() {
   });
 }
 
-async function renderSlide(index, updateUrl = true) {
+async function renderSlide(index, historyMode = "push") {
   if (activeSlides.length === 0) return;
   if (isCategoryTransitioning) return;
 
@@ -269,23 +331,26 @@ async function renderSlide(index, updateUrl = true) {
     displayedSlide && groupKey(displayedSlide) !== groupKey(nextSlide);
 
   if (!changesCategory || reduceMotion.matches) {
-    applySlide(nextIndex, updateUrl);
+    applySlide(nextIndex, historyMode);
     return;
   }
 
   isCategoryTransitioning = true;
+  const transitionSequence = ++categoryTransitionSequence;
   viewer.classList.add("is-category-transitioning");
   categoryMask.classList.add("is-covering");
 
   try {
     await waitForCategoryMask();
-    applySlide(nextIndex, updateUrl);
+    if (transitionSequence !== categoryTransitionSequence) return;
+    applySlide(nextIndex, historyMode);
 
     categoryMask.classList.remove("is-covering");
     categoryMask.classList.add("is-revealing");
 
     await waitForCategoryMask();
   } finally {
+    if (transitionSequence !== categoryTransitionSequence) return;
     // 即使圖片或頁碼更新失敗，也不能讓遮罩與點擊鎖定留在畫面上。
     categoryMask.style.transition = "none";
     categoryMask.classList.remove("is-covering", "is-revealing");
@@ -294,6 +359,49 @@ async function renderSlide(index, updateUrl = true) {
     viewer.classList.remove("is-category-transitioning");
     isCategoryTransitioning = false;
   }
+}
+
+function restoreFromLocation() {
+  categoryTransitionSequence += 1;
+  isCategoryTransitioning = false;
+  categoryMask.style.transition = "none";
+  categoryMask.classList.remove("is-covering", "is-revealing");
+  categoryMask.getBoundingClientRect();
+  categoryMask.style.transition = "";
+  viewer.classList.remove("is-category-transitioning");
+
+  const route = routeFromHash(window.location.hash);
+
+  if (!window.location.hash) {
+    activeSlides = slides;
+    applySlide(0, "none");
+    syncWorkIndexActive(slides[0]);
+  } else if (route) {
+    activeSlides = route.slides;
+    applySlide(route.index, "none");
+    syncWorkIndexActive(route.slide);
+
+    const canonicalHash = hashForSlide(route.slide);
+    if (window.location.hash !== canonicalHash) {
+      window.history.replaceState(null, "", canonicalHash);
+    }
+  } else {
+    activeSlides = slides;
+    applySlide(0, "replace");
+    syncWorkIndexActive(slides[0]);
+  }
+
+  if (hasRenderedThumbs) renderThumbs();
+}
+
+function scheduleHistoryRestore() {
+  if (historyRestoreScheduled) return;
+
+  historyRestoreScheduled = true;
+  window.queueMicrotask(() => {
+    historyRestoreScheduled = false;
+    restoreFromLocation();
+  });
 }
 
 // 自動建立作品分類列表
@@ -347,7 +455,7 @@ function renderWorkIndex() {
         const projectLabel = document.createElement("span");
         const projectCount = document.createElement("span");
         const projectSlides = slides.filter(
-          (slide) => slide.category === work.title && slide.project === projectTitle
+          (slide) => sameGroupName(slide.category, work.title) && sameGroupName(slide.project, projectTitle)
         );
 
         projectLabel.textContent = projectTitle;
@@ -382,6 +490,9 @@ function renderWorkIndex() {
 }
 
 function renderThumbs() {
+  const thumbGroup = activeSlides === slides ? "__all__" : groupKey(activeSlides[0]);
+  if (hasRenderedThumbs && renderedThumbGroup === thumbGroup) return;
+
   thumbsGrid.innerHTML = "";
 
   const fragment = document.createDocumentFragment();
@@ -423,34 +534,97 @@ function renderThumbs() {
 
   thumbsGrid.append(fragment);
   hasRenderedThumbs = true;
+  renderedThumbGroup = thumbGroup;
+}
+
+function focusableElements(container) {
+  return Array.from(container.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  )).filter((element) => (
+    !element.closest("[inert]")
+    && getComputedStyle(element).visibility !== "hidden"
+    && element.getClientRects().length > 0
+  ));
+}
+
+function trapFocus(event, container) {
+  if (event.key !== "Tab") return;
+
+  const focusable = focusableElements(container);
+  if (focusable.length === 0) {
+    event.preventDefault();
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (event.shiftKey && (document.activeElement === first || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (document.activeElement === last || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function setThumbBackgroundInert(isInert) {
+  viewer.inert = isInert;
+  bottomNav.inert = isInert;
 }
 
 function openPanel() {
-  closeThumbs();
+  closeThumbs(false);
+  panelReturnFocus = openPanelButton;
+  panel.inert = false;
   body.classList.add("is-panel-open");
   body.classList.add("is-modal-open");
   panel.setAttribute("aria-hidden", "false");
+  window.requestAnimationFrame(() => {
+    panel.querySelector("[data-panel-tab].is-active")?.focus();
+  });
 }
 
-function closePanel() {
+function closePanel(restoreFocus = true) {
+  const wasOpen = body.classList.contains("is-panel-open");
+
+  panel.inert = true;
   body.classList.remove("is-panel-open");
   if (!body.classList.contains("is-thumbs-open")) body.classList.remove("is-modal-open");
   panel.setAttribute("aria-hidden", "true");
+
+  if (wasOpen && restoreFocus) {
+    (panelReturnFocus || openPanelButton).focus();
+  }
 }
 
 function openThumbs() {
-  closePanel();
+  closePanel(false);
+  thumbsReturnFocus = openThumbsButton;
   if (!hasRenderedThumbs) renderThumbs();
   thumbsGhost.src = thumbPath(activeSlides[activeIndex].image);
+  thumbsOverlay.inert = false;
+  setThumbBackgroundInert(true);
   body.classList.add("is-thumbs-open");
   body.classList.add("is-modal-open");
   thumbsOverlay.setAttribute("aria-hidden", "false");
+  window.requestAnimationFrame(() => {
+    thumbsOverlay.querySelector(".thumbs-overlay__title")?.focus();
+  });
 }
 
-function closeThumbs() {
+function closeThumbs(restoreFocus = true) {
+  const wasOpen = body.classList.contains("is-thumbs-open");
+
+  thumbsOverlay.inert = true;
+  setThumbBackgroundInert(false);
   body.classList.remove("is-thumbs-open");
   if (!body.classList.contains("is-panel-open")) body.classList.remove("is-modal-open");
   thumbsOverlay.setAttribute("aria-hidden", "true");
+
+  if (wasOpen && restoreFocus) {
+    (thumbsReturnFocus || openThumbsButton).focus();
+  }
 }
 
 function setPanelTab(tab) {
@@ -479,9 +653,9 @@ viewer.addEventListener("mouseleave", () => {
   viewer.classList.remove("is-cursor-visible");
 });
 
-document.querySelector("[data-open-panel]").addEventListener("click", openPanel);
+openPanelButton.addEventListener("click", openPanel);
 document.querySelector("[data-close-panel]").addEventListener("click", closePanel);
-document.querySelector("[data-open-thumbs]").addEventListener("click", openThumbs);
+openThumbsButton.addEventListener("click", openThumbs);
 document.querySelectorAll("[data-close-thumbs]").forEach((button) => {
   button.addEventListener("click", closeThumbs);
 });
@@ -495,13 +669,25 @@ document.querySelectorAll("[data-panel-tab]").forEach((button) => {
 });
 
 window.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowRight") renderSlide(activeIndex + 1);
-  if (event.key === "ArrowLeft") renderSlide(activeIndex - 1);
+  if (body.classList.contains("is-thumbs-open")) {
+    trapFocus(event, thumbsOverlay);
+  }
+
+  if (!body.classList.contains("is-modal-open")) {
+    if (event.key === "ArrowRight") renderSlide(activeIndex + 1);
+    if (event.key === "ArrowLeft") renderSlide(activeIndex - 1);
+  }
   if (event.key === "Escape") {
-    closePanel();
-    closeThumbs();
+    if (body.classList.contains("is-thumbs-open")) {
+      closeThumbs();
+    } else if (body.classList.contains("is-panel-open")) {
+      closePanel();
+    }
   }
 });
+
+window.addEventListener("popstate", scheduleHistoryRestore);
+window.addEventListener("hashchange", scheduleHistoryRestore);
 
 renderWorkIndex();
 
@@ -514,11 +700,19 @@ activeImage.addEventListener(
   { once: true }
 );
 
-// 首頁初次載入保留乾淨網址；使用者開始瀏覽後才加入作品位置。
-renderSlide(0, false);
+restoreFromLocation();
 
-if (reduceMotion.matches) {
-  body.classList.add("is-intro-finished");
+let hasPlayedIntro = false;
+
+try {
+  hasPlayedIntro = window.sessionStorage.getItem("wanwang-intro-played") === "true";
+  window.sessionStorage.setItem("wanwang-intro-played", "true");
+} catch {
+  // sessionStorage 被停用時，維持一般 Intro 行為。
+}
+
+if (reduceMotion.matches || hasPlayedIntro) {
+  body.classList.add("is-intro-base-cleared", "is-intro-finished");
 } else {
   window.setTimeout(() => {
     body.classList.add("is-intro-sweeping");

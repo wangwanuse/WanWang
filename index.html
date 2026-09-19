@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="WanWang — Photographer based in Taipei.">
+  <link rel="canonical" href="https://wan-wang.vercel.app/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="WanWang">
@@ -25,7 +26,7 @@
   <meta name="twitter:image" content="https://wan-wang.vercel.app/images/og-image_1200x630.jpg?v=2">
   <title>WanWang</title>
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/main.css?v=21">
+  <link rel="stylesheet" href="css/main.css?v=22">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap');
@@ -37,6 +38,7 @@
   <section class="intro" aria-hidden="true">
     <span class="intro__base"></span>
     <div class="intro__content">
+      <h1 class="sr-only">WanWang Photographer Portfolio</h1>
       <strong>WanWang</strong>
       <span>Photographer</span>
     </div>
@@ -64,7 +66,7 @@
 
     <div class="modal-overlay" aria-hidden="true"></div>
 
-    <aside class="index-panel" aria-label="作品索引" aria-hidden="true">
+    <aside class="index-panel" aria-label="作品索引" aria-hidden="true" inert>
       <nav class="index-panel__nav" aria-label="索引切換">
         <button class="is-active" type="button" data-panel-tab="works">Works</button>
         <button type="button" data-panel-tab="info">Info</button>
@@ -99,7 +101,7 @@
 
         <div class="index-info__links">
             <a href="mailto:cosmec6024195@gmail.com"
-            rel="noreferrer">Contect</a>
+            rel="noreferrer">Contact</a>
 
             <a href="https://www.instagram.com/_wang_wan?igsh=MXZ3NnRzN3RxdnFpbA%3D%3D&utm_source=qr" target="_blank"
             rel="noreferrer">Instagram</a>
@@ -111,7 +113,7 @@
       </footer>
     </aside>
 
-    <section class="thumbs-overlay" aria-label="作品縮圖" aria-hidden="true">
+    <section class="thumbs-overlay" role="dialog" aria-modal="true" aria-label="作品縮圖" aria-hidden="true" inert>
       <img class="thumbs-overlay__ghost" id="thumbs-ghost" alt="" decoding="async">
       <div class="thumbs-grid" id="thumbs-grid"></div>
       <footer class="thumbs-overlay__footer">
@@ -128,7 +130,7 @@
     <button type="button" data-open-thumbs>Thumbs</button>
   </footer>
 
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=12"></script>
 </body>
 
 </html>
