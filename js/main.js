@@ -111,6 +111,14 @@ let displayedSlide = activeSlides[0];
 let isCategoryTransitioning = false;
 let hasRenderedThumbs = false;
 
+// THUMBS 專用：保留原始子資料夾結構，並改用 600px WebP 縮圖。
+function thumbPath(imagePath) {
+  return imagePath.replace(
+    /^images\/(?!thumbs\/)(.+)\.(?:jpe?g|png)$/i,
+    "images/thumbs/$1.webp"
+  );
+}
+
 // 網址數字補成兩位
 function padNumber(number) {
   return String(number).padStart(2, "0");
@@ -174,7 +182,9 @@ function applySlide(index) {
   activeCaption.textContent = captionFor(activeIndex);
   viewerCursorCategory.textContent = slide.title;
   viewerCursorCount.textContent = `${padNumber(categoryIndex + 1)} / ${padNumber(categorySlides.length)}`;
-  thumbsGhost.src = slide.image;
+  if (body.classList.contains("is-thumbs-open")) {
+    thumbsGhost.src = thumbPath(slide.image);
+  }
   thumbsTitle.textContent = slide.title;
   displayedSlide = slide;
 
@@ -365,10 +375,10 @@ function renderThumbs() {
       `${slide.title} ${index + 1}`
     );
 
-    image.src = slide.image;
-image.alt = "";
-image.loading = "lazy";
-image.decoding = "async";
+    image.src = thumbPath(slide.image);
+    image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
 
     button.append(image);
 
@@ -400,6 +410,7 @@ function closePanel() {
 function openThumbs() {
   closePanel();
   if (!hasRenderedThumbs) renderThumbs();
+  thumbsGhost.src = thumbPath(activeSlides[activeIndex].image);
   body.classList.add("is-thumbs-open");
   body.classList.add("is-modal-open");
   thumbsOverlay.setAttribute("aria-hidden", "false");
