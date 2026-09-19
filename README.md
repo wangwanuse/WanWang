@@ -5,8 +5,6 @@ This is a plain HTML, SCSS, CSS, and JavaScript portfolio starter.
 ## Structure
 
 - `index.html` - single-page portfolio viewer, index panel, info panel, and thumbs overlay
-- `project.html` - redirect fallback to the portfolio
-- `about.html` - redirect fallback to the portfolio
 - `scss/main.scss` - source styles
 - `css/main.css` - browser-ready stylesheet
 - `js/main.js` - small project data helper

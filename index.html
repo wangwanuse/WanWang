@@ -1,31 +1,65 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" prefix="og: https://ogp.me/ns#">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Photography portfolio">
+  <meta name="description" content="WanWang — Photographer based in Taipei.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WanWang">
+  <meta property="og:title" content="WanWang — Photographer">
+  <meta property="og:description" content="Photography portfolio by WanWang.">
+  <meta property="og:url" content="https://wan-wang.vercel.app/">
+  <meta property="og:image" content="https://wan-wang.vercel.app/images/og-image_1200x630.jpg?v=2">
+  <meta property="og:image:secure_url" content="https://wan-wang.vercel.app/images/og-image_1200x630.jpg?v=2">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Editorial photography by WanWang">
+  <link rel="preload" as="image" href="images/event/event_01.jpg" fetchpriority="high" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WanWang — Photographer">
+  <meta name="twitter:description" content="Photography portfolio by WanWang.">
+  <meta name="twitter:image" content="https://wan-wang.vercel.app/images/og-image_1200x630.jpg?v=2">
   <title>WanWang</title>
-  <link rel="stylesheet" href="css/main.css?">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/main.css?v=21">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap');
+"
+    rel="stylesheet">
 </head>
 
 <body>
-  <div class="intro" aria-hidden="true">
-    <div class="intro__inner">
+  <section class="intro" aria-hidden="true">
+    <span class="intro__base"></span>
+    <div class="intro__content">
       <strong>WanWang</strong>
       <span>Photographer</span>
     </div>
-  </div>
+    <span class="intro__panel intro__panel--dark"></span>
+    <span class="intro__panel intro__panel--gray"></span>
+    <span class="intro__panel intro__panel--light"></span>
+  </section>
 
   <main class="site-shell" aria-label="Photography portfolio">
     <section class="viewer" aria-label="作品瀏覽">
       <button class="viewer__hit viewer__hit--prev" type="button" aria-label="上一張作品" data-direction="prev"></button>
       <figure class="viewer__figure">
-        <img id="active-image" src="images/still-life/still-life_01.jpeg" alt="Portrait Studies">
+        <span class="viewer__category-mask" aria-hidden="true"></span>
+        <img id="active-image" src="images/event/event_01.jpg" alt="Event work 1" loading="eager" decoding="async"
+          fetchpriority="high">
       </figure>
       <button class="viewer__hit viewer__hit--next" type="button" aria-label="下一張作品" data-direction="next"></button>
 
-      <p class="viewer__caption" id="active-caption">Recent - 1/16</p>
+      <p class="viewer__caption" id="active-caption">Event - 1/13</p>
+      <span class="viewer__cursor" id="viewer-cursor" aria-hidden="true">
+        <span class="viewer__cursor-category">Event</span>
+        <span class="viewer__cursor-count">01 / 13</span>
+      </span>
     </section>
 
     <div class="modal-overlay" aria-hidden="true"></div>
@@ -41,20 +75,34 @@
       </div>
 
       <div class="index-panel__section index-info" data-panel-section="info">
-        <p>WanWang is a photographer based in Taipei.</p>
-        <p>Represented by <a href="#">Studio / Agent</a></p>
-        <p>Print inquiries <a href="mailto:hello@example.com">hello@example.com</a></p>
+        <div class="index-info__bio">
+          <p>Wang Wan is a Taiwanese photographer and art director based in London.</p>
+          <p>Wang's work explores vulnerability and raw human emotion through imagery that balances intensity with
+            delicacy.</p>
+        </div>
 
-        <h2>Books</h2>
-        <p>2026 Personal Archive</p>
-        <p>2025 Portrait Studies</p>
-        <p>2024 Street Light</p>
+        <div class="index-info__clients">
+          <strong>Clients</strong>
+          <ul aria-label="Selected clients">
+            <li>ASUS</li>
+            <li>CASETiFY</li>
+            <li>Coca-Cola</li>
+            <li>Guerlain</li>
+            <li>Maybelline</li>
+            <li>Sawaa</li>
+            <li>五燈獎</li>
+            <li>Erwachen</li>
+            <li>GoPhoto</li>
+            <li>ICIC</li>
+          </ul>
+        </div>
 
         <div class="index-info__links">
-          <a href="https://www.instagram.com/_wang_wan?igsh=MXZ3NnRzN3RxdnFpbA%3D%3D&utm_source=qr" target="_blank"
+            <a href="mailto:cosmec6024195@gmail.com"
+            rel="noreferrer">Contect</a>
+
+            <a href="https://www.instagram.com/_wang_wan?igsh=MXZ3NnRzN3RxdnFpbA%3D%3D&utm_source=qr" target="_blank"
             rel="noreferrer">Instagram</a>
-          <span>-</span>
-          <a href="https://vimeo.com/" target="_blank" rel="noreferrer">Motion</a>
         </div>
       </div>
 
@@ -65,12 +113,12 @@
     </aside>
 
     <section class="thumbs-overlay" aria-label="作品縮圖" aria-hidden="true">
-      <img class="thumbs-overlay__ghost" id="thumbs-ghost" src="images/still-life/still-life_01.jpeg" alt="">
+      <img class="thumbs-overlay__ghost" id="thumbs-ghost" src="images/event/event_01.jpg" alt="">
       <div class="thumbs-grid" id="thumbs-grid"></div>
       <footer class="thumbs-overlay__footer">
-        <span id="thumbs-title">Recent</span>
+        <button class="thumbs-overlay__title" id="thumbs-title" type="button" data-close-thumbs>Event</button>
         <span aria-hidden="true"></span>
-        <button type="button" data-close-thumbs>Close</button>
+        <button class="thumbs-overlay__close" type="button" data-close-thumbs>Close</button>
       </footer>
     </section>
   </main>
@@ -81,7 +129,7 @@
     <button type="button" data-open-thumbs>Thumbs</button>
   </footer>
 
-  <script src="js/main.js?v=3"></script>
+  <script src="js/main.js?v=8"></script>
 </body>
 
 </html>
