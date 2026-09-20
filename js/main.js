@@ -5,7 +5,7 @@ const works = [
   {
     title: "Editorial",
     projects: [
-      "2026-Texture", "2025-Appearance anxiety", "2025-女の人",
+      "2026-Texture", "2025-Appearance Anxiety", "2025-女の人",
       "2024-Mimicry", "2024-Strange", "2024-The room",
       "Elegant Battle", "Klimt", "Taiwan's summer"
     ]
@@ -29,14 +29,14 @@ function numberedSlides({ title, category = title, folder, prefix, count, extens
 }
 
 const editorialProjects = [
-  { title: "2026-Texture", folder: "editorial/2026-Texture", prefix: "2026-Texture", count: 7 },
+  { title: "2026-Texture", folder: "editorial/2026-texture", prefix: "2026-texture", count: 7 },
   { title: "2025-Appearance anxiety", folder: "editorial/2025-Appearance anxiety", prefix: "2025-Appearance anxiety", count: 15 },
   { title: "2025-女の人", folder: "editorial/2025-woman", prefix: "2025-woman", count: 10 },
   { title: "2024-Mimicry", folder: "editorial/2024-Mimicry", prefix: "2024-Mimicry", count: 3 },
-  { title: "2024-Strange", folder: "editorial/2024-Strange", prefix: "2024-strange", count: 7 },
+  { title: "2024-Strange", folder: "editorial/2024-strange", prefix: "2024-strange", count: 7 },
   { title: "Elegant Battle", folder: "editorial/Elegant Battle", prefix: "Elegant-Battle", count: 8 },
-  { title: "Klimt", folder: "editorial/Klimt", prefix: "Klimt", count: 5 },
-  { title: "Taiwan's summer", folder: "editorial/Taiwan_s summer", prefix: "taiwan_s-summer", count: 8, extension: "JPG" }
+  { title: "Klimt", folder: "editorial/klimt", prefix: "klimt", count: 5 },
+  { title: "Taiwan's summer", folder: "editorial/taiwan_s summer", prefix: "taiwan_s-summer", count: 8, extension: "JPG" }
 ];
 
 const editorialSlides = editorialProjects.flatMap((project) =>
@@ -122,9 +122,24 @@ let categoryTransitionSequence = 0;
 
 // THUMBS 專用：保留原始子資料夾結構，並改用 600px WebP 縮圖。
 function thumbPath(imagePath) {
-  return imagePath.replace(
+  const thumbnailPath = imagePath.replace(
     /^images\/(?!thumbs\/)(.+)\.(?:jpe?g|png)$/i,
     "images/thumbs/$1.webp"
+  );
+
+  const thumbnailFolderAliases = {
+    "editorial/2026-texture": "editorial/2026-Texture",
+    "editorial/2025-woman": "editorial/2025-Woman",
+    "editorial/2024-strange": "editorial/2024-Strange",
+    "editorial/2024-the room": "editorial/2024-The Room",
+    "editorial/klimt": "editorial/Klimt",
+    "editorial/taiwan_s summer": "editorial/Taiwan_s summer"
+  };
+
+  return Object.entries(thumbnailFolderAliases).reduce(
+    (path, [sourceFolder, thumbnailFolder]) =>
+      path.replace(`images/thumbs/${sourceFolder}/`, `images/thumbs/${thumbnailFolder}/`),
+    thumbnailPath
   );
 }
 
