@@ -6,7 +6,7 @@ const works = [
     title: "Editorial",
     projects: [
       "2026-Texture", "2025-Appearance anxiety", "2025-女の人",
-      "2024-Mimicry", "2024-strange", "2024-The room",
+      "2024-Mimicry", "2024-Strange", "2024-The room",
       "Elegant Battle", "Klimt", "Taiwan's summer"
     ]
   },
@@ -29,14 +29,14 @@ function numberedSlides({ title, category = title, folder, prefix, count, extens
 }
 
 const editorialProjects = [
-  { title: "2026-texture", folder: "editorial/2026-texture", prefix: "2026-texture", count: 7 },
+  { title: "2026-Texture", folder: "editorial/2026-Texture", prefix: "2026-Texture", count: 7 },
   { title: "2025-Appearance anxiety", folder: "editorial/2025-Appearance anxiety", prefix: "2025-Appearance anxiety", count: 15 },
   { title: "2025-女の人", folder: "editorial/2025-woman", prefix: "2025-woman", count: 10 },
   { title: "2024-Mimicry", folder: "editorial/2024-Mimicry", prefix: "2024-Mimicry", count: 3 },
-  { title: "2024-strange", folder: "editorial/2024-strange", prefix: "2024-strange", count: 7 },
+  { title: "2024-Strange", folder: "editorial/2024-Strange", prefix: "2024-strange", count: 7 },
   { title: "Elegant Battle", folder: "editorial/Elegant Battle", prefix: "Elegant-Battle", count: 8 },
-  { title: "klimt", folder: "editorial/klimt", prefix: "klimt", count: 5 },
-  { title: "taiwan's summer", folder: "editorial/taiwan_s summer", prefix: "taiwan_s-summer", count: 8, extension: "JPG" }
+  { title: "Klimt", folder: "editorial/Klimt", prefix: "Klimt", count: 5 },
+  { title: "Taiwan's summer", folder: "editorial/Taiwan_s summer", prefix: "taiwan_s-summer", count: 8, extension: "JPG" }
 ];
 
 const editorialSlides = editorialProjects.flatMap((project) =>

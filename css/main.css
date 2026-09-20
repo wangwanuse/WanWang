@@ -775,6 +775,9 @@ img {
     padding-left: 28px;
     padding-right: 28px;
   }
+  .work-index {
+    max-width: none;
+  }
   .thumbs-overlay {
     padding: 72px 0 0;
   }
