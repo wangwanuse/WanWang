@@ -5,9 +5,9 @@ const works = [
   {
     title: "Editorial",
     projects: [
-      "2026-Texture", "2025-Appearance Anxiety", "2025-女の人",
+      "2026-Texture", "2025-Appearance anxiety", "2025-女の人",
       "2024-Mimicry", "2024-Strange", "2024-The room",
-      "Elegant Battle", "Klimt", "Taiwan's summer"
+      "Elegant battle", "Klimt", "Taiwan's summer"
     ]
   },
   { title: "Still life" },
@@ -29,14 +29,14 @@ function numberedSlides({ title, category = title, folder, prefix, count, extens
 }
 
 const editorialProjects = [
-  { title: "2026-Texture", folder: "editorial/2026-texture", prefix: "2026-texture", count: 7 },
-  { title: "2025-Appearance anxiety", folder: "editorial/2025-Appearance anxiety", prefix: "2025-Appearance anxiety", count: 15 },
-  { title: "2025-女の人", folder: "editorial/2025-woman", prefix: "2025-woman", count: 10 },
-  { title: "2024-Mimicry", folder: "editorial/2024-Mimicry", prefix: "2024-Mimicry", count: 3 },
-  { title: "2024-Strange", folder: "editorial/2024-strange", prefix: "2024-strange", count: 7 },
-  { title: "Elegant Battle", folder: "editorial/Elegant Battle", prefix: "Elegant-Battle", count: 8 },
-  { title: "Klimt", folder: "editorial/klimt", prefix: "klimt", count: 5 },
-  { title: "Taiwan's summer", folder: "editorial/taiwan_s summer", prefix: "taiwan_s-summer", count: 8, extension: "JPG" }
+  { title: "2026-Texture", folder: "Editorial/2026-Texture", prefix: "2026-Texture", count: 7 },
+  { title: "2025-Appearance anxiety", folder: "Editorial/2025-Appearance anxiety", prefix: "2025-Appearance anxiety", count: 15 },
+  { title: "2025-女の人", folder: "Editorial/2025-Woman", prefix: "2025-Woman", count: 10 },
+  { title: "2024-Mimicry", folder: "Editorial/2024-Mimicry", prefix: "2024-Mimicry", count: 3 },
+  { title: "2024-Strange", folder: "Editorial/2024-Strange", prefix: "2024-Strange", count: 7 },
+  { title: "Elegant battle", folder: "Editorial/Elegant battle", prefix: "Elegant battle", count: 8 },
+  { title: "Klimt", folder: "Editorial/Klimt", prefix: "Klimt", count: 5 },
+  { title: "Taiwan's summer", folder: "Editorial/Taiwan_s summer", prefix: "Taiwan_s summer", count: 8, extension: "JPG" }
 ];
 
 const editorialSlides = editorialProjects.flatMap((project) =>
@@ -52,36 +52,34 @@ const editorialSlides = editorialProjects.flatMap((project) =>
 );
 
 editorialSlides.splice(42, 0,
-  ...numberedSlides({ title: "2024-the room", category: "Editorial", project: "2024-the room", folder: "editorial/2024-the room", prefix: "2024-the room", count: 3 }),
-  ...Array.from({ length: 7 }, (_, index) => ({
-    title: "2024-the room", category: "Editorial", project: "2024-the room",
-    image: `images/editorial/2024-the room/2024-the-room_${String(index + 4).padStart(2, "0")}.jpg`,
-    alt: `2024-the room work ${index + 4}`
-  }))
+  ...numberedSlides({
+    title: "2024-The room", category: "Editorial", project: "2024-The room",
+    folder: "Editorial/2024-The room", prefix: "2024-The room", count: 10
+  })
 );
 
 const slides = [
-  ...numberedSlides({ title: "Event", folder: "event", prefix: "event", count: 13 }),
-  ...numberedSlides({ title: "Recent", folder: "recent", prefix: "recent", count: 21 }),
+  ...numberedSlides({ title: "Event", folder: "Event", prefix: "Event", count: 13 }),
+  ...numberedSlides({ title: "Recent", folder: "Recent", prefix: "Recent", count: 21 }),
   ...editorialSlides,
-  ...numberedSlides({ title: "Still life", folder: "still-life", prefix: "still-life", count: 32 }),
-  ...numberedSlides({ title: "Advertising", folder: "advertising", prefix: "advertising", count: 21 }),
+  ...numberedSlides({ title: "Still life", folder: "Still life", prefix: "Still life", count: 32 }),
+  ...numberedSlides({ title: "Advertising", folder: "Advertising", prefix: "Advertising", count: 21 }),
   ...[
     ...Array.from({ length: 20 }, (_, index) => index + 1), "23", "23-1", "23-2",
     ...Array.from({ length: 34 }, (_, index) => index + 24)
   ].map((number, index) => ({
     title: "Lookbook", category: "Lookbook",
-    image: `images/lookbook/lookbook_${typeof number === "number" ? String(number).padStart(2, "0") : number}.jpg`,
+    image: `images/Lookbook/Lookbook_${typeof number === "number" ? String(number).padStart(2, "0") : number}.jpg`,
     alt: `Lookbook work ${index + 1}`
   })),
-  ...numberedSlides({ title: "Beauty", folder: "beauty", prefix: "beauty", count: 10 }),
+  ...numberedSlides({ title: "Beauty", folder: "Beauty", prefix: "Beauty", count: 10 }),
   ...[
     ...Array.from({ length: 7 }, (_, index) => `${String(index + 1).padStart(2, "0")}.${index === 1 ? "JPG" : "jpg"}`),
     "07-2.jpg",
     ...Array.from({ length: 18 }, (_, index) => `${String(index + 8).padStart(2, "0")}.jpg`)
   ].map((file, index) => ({
     title: "Retouch", category: "Retouch",
-    image: `images/retouch/retouch_${file}`,
+    image: `images/Retouch/Retouch_${file}`,
     alt: `Retouch work ${index + 1}`
   }))
 ];
@@ -122,24 +120,9 @@ let categoryTransitionSequence = 0;
 
 // THUMBS 專用：保留原始子資料夾結構，並改用 600px WebP 縮圖。
 function thumbPath(imagePath) {
-  const thumbnailPath = imagePath.replace(
-    /^images\/(?!thumbs\/)(.+)\.(?:jpe?g|png)$/i,
-    "images/thumbs/$1.webp"
-  );
-
-  const thumbnailFolderAliases = {
-    "editorial/2026-texture": "editorial/2026-Texture",
-    "editorial/2025-woman": "editorial/2025-Woman",
-    "editorial/2024-strange": "editorial/2024-Strange",
-    "editorial/2024-the room": "editorial/2024-The Room",
-    "editorial/klimt": "editorial/Klimt",
-    "editorial/taiwan_s summer": "editorial/Taiwan_s summer"
-  };
-
-  return Object.entries(thumbnailFolderAliases).reduce(
-    (path, [sourceFolder, thumbnailFolder]) =>
-      path.replace(`images/thumbs/${sourceFolder}/`, `images/thumbs/${thumbnailFolder}/`),
-    thumbnailPath
+  return imagePath.replace(
+    /^images\/(?!Thumbs\/)(.+)\.(?:jpe?g|png)$/i,
+    "images/Thumbs/$1.webp"
   );
 }
 
