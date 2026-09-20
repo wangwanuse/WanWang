@@ -482,6 +482,14 @@ img {
       cursor: default;
       opacity: 0.45;
     }
+
+    &.is-loading {
+      cursor: wait;
+
+      span:last-child {
+        opacity: 0.45;
+      }
+    }
   }
 
   &__spacer {

@@ -117,6 +117,7 @@ let panelReturnFocus = null;
 let thumbsReturnFocus = null;
 let historyRestoreScheduled = false;
 let categoryTransitionSequence = 0;
+let indexSelectionSequence = 0;
 
 // THUMBS 專用：保留原始子資料夾結構，並改用 600px WebP 縮圖。
 function thumbPath(imagePath) {
@@ -130,6 +131,16 @@ function thumbPath(imagePath) {
 function prepareSlideImage(imagePath) {
   return new Promise((resolve) => {
     const image = new Image();
+    let hasSettled = false;
+
+    const finish = (didLoad) => {
+      if (hasSettled) return;
+      hasSettled = true;
+      window.clearTimeout(timeoutId);
+      resolve(didLoad);
+    };
+
+    const timeoutId = window.setTimeout(() => finish(false), 8000);
 
     image.decoding = "async";
     image.onload = async () => {
@@ -138,9 +149,9 @@ function prepareSlideImage(imagePath) {
       } catch {
         // 圖片已完成載入時，即使 decode() 不支援或失敗仍可繼續顯示。
       }
-      resolve();
+      finish(true);
     };
-    image.onerror = resolve;
+    image.onerror = () => finish(false);
     image.src = imagePath;
   });
 }
@@ -302,6 +313,16 @@ function waitForCategoryMask() {
   });
 }
 
+function resetCategoryTransition() {
+  categoryTransitionSequence += 1;
+  isCategoryTransitioning = false;
+  categoryMask.style.transition = "none";
+  categoryMask.classList.remove("is-covering", "is-revealing");
+  categoryMask.getBoundingClientRect();
+  categoryMask.style.transition = "";
+  viewer.classList.remove("is-category-transitioning");
+}
+
 async function renderSlide(index, historyMode = "push") {
   if (activeSlides.length === 0) return;
   if (isCategoryTransitioning) return;
@@ -360,13 +381,9 @@ async function renderSlide(index, historyMode = "push") {
 }
 
 function restoreFromLocation() {
-  categoryTransitionSequence += 1;
-  isCategoryTransitioning = false;
-  categoryMask.style.transition = "none";
-  categoryMask.classList.remove("is-covering", "is-revealing");
-  categoryMask.getBoundingClientRect();
-  categoryMask.style.transition = "";
-  viewer.classList.remove("is-category-transitioning");
+  indexSelectionSequence += 1;
+  clearIndexSelectionLoading();
+  resetCategoryTransition();
 
   const route = routeFromHash(window.location.hash);
 
@@ -402,6 +419,43 @@ function scheduleHistoryRestore() {
   });
 }
 
+function clearIndexSelectionLoading() {
+  document.querySelectorAll("#work-index button.is-loading").forEach((button) => {
+    button.classList.remove("is-loading");
+    button.removeAttribute("aria-busy");
+  });
+}
+
+// 從 Index 切換分類時，先完成第一張圖片的載入與解碼，再關閉選單。
+// 這可避免選單退場時短暫露出上一個分類的圖片。
+async function selectSlidesFromIndex(nextSlides, activeButton) {
+  if (nextSlides.length === 0) return;
+
+  const selectionSequence = ++indexSelectionSequence;
+
+  clearIndexSelectionLoading();
+  document.querySelectorAll("#work-index button").forEach((workButton) => {
+    workButton.classList.remove("is-active");
+  });
+  activeButton.classList.add("is-active");
+  activeButton.classList.add("is-loading");
+  activeButton.setAttribute("aria-busy", "true");
+
+  await prepareSlideImage(nextSlides[0].image);
+
+  // 快速連點分類時，只採用最後一次選擇。
+  if (selectionSequence !== indexSelectionSequence) return;
+
+  clearIndexSelectionLoading();
+  resetCategoryTransition();
+  activeSlides = nextSlides;
+  activeIndex = 0;
+
+  if (hasRenderedThumbs) renderThumbs();
+  applySlide(0);
+  closePanel();
+}
+
 // 自動建立作品分類列表
 function renderWorkIndex() {
   const fragment = document.createDocumentFragment();
@@ -426,19 +480,7 @@ function renderWorkIndex() {
       work.title === activeSlides[0]?.category
     );
     button.addEventListener("click", () => {
-      activeSlides = workSlides;
-
-      activeIndex = 0;
-
-      document.querySelectorAll("#work-index button").forEach((workButton) => {
-        workButton.classList.remove("is-active");
-      });
-
-      button.classList.add("is-active");
-
-      if (hasRenderedThumbs) renderThumbs();
-      renderSlide(0);
-      closePanel();
+      selectSlidesFromIndex(workSlides, button);
     });
 
     item.append(button);
@@ -463,15 +505,7 @@ function renderWorkIndex() {
         projectButton.append(projectLabel, projectCount);
         projectButton.addEventListener("click", (event) => {
           event.stopPropagation();
-          activeSlides = projectSlides;
-          activeIndex = 0;
-          document.querySelectorAll("#work-index button").forEach((workButton) => {
-            workButton.classList.remove("is-active");
-          });
-          projectButton.classList.add("is-active");
-          if (hasRenderedThumbs) renderThumbs();
-          renderSlide(0);
-          closePanel();
+          selectSlidesFromIndex(projectSlides, projectButton);
         });
 
         projectItem.append(projectButton);

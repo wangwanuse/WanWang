@@ -515,6 +515,12 @@ img {
   cursor: default;
   opacity: 0.45;
 }
+.work-index button.is-loading {
+  cursor: wait;
+}
+.work-index button.is-loading span:last-child {
+  opacity: 0.45;
+}
 .work-index__spacer {
   height: 34px;
 }
