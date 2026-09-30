@@ -75,99 +75,114 @@ img {
 .intro__base {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   display: block;
   background: #000;
+  will-change: transform;
 }
-.is-intro-base-cleared .intro__base {
-  visibility: hidden;
+.is-intro-hiding .intro__base {
+  -webkit-animation: intro-background-out 1s cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s both;
+          animation: intro-background-out 1s cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s both;
 }
 .intro__content {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  gap: 48px;
-  padding-left: 10vw;
+  gap: 50px;
+  padding-left: 10%;
   color: #fff;
-  opacity: 1;
-  -webkit-transition: opacity 260ms ease, -webkit-transform 360ms cubic-bezier(0.76, 0, 0.24, 1);
-  transition: opacity 260ms ease, -webkit-transform 360ms cubic-bezier(0.76, 0, 0.24, 1);
-  transition: opacity 260ms ease, transform 360ms cubic-bezier(0.76, 0, 0.24, 1);
-  transition: opacity 260ms ease, transform 360ms cubic-bezier(0.76, 0, 0.24, 1), -webkit-transform 360ms cubic-bezier(0.76, 0, 0.24, 1);
 }
 .intro__content strong,
 .intro__content span {
+  color: #fff;
+  font-size: 16px;
   font-weight: 400;
-}
-.intro__content span {
-  color: rgba(255, 255, 255, 0.5);
-}
-.is-intro-sweeping .intro__content {
   opacity: 0;
-  -webkit-transform: translateY(-12px);
-          transform: translateY(-12px);
+  will-change: opacity, transform;
 }
-.intro__panel {
-  position: absolute;
-  inset: 0;
-  display: block;
-  -webkit-transform: translateY(105%);
-          transform: translateY(105%);
-  will-change: transform;
+.intro__content strong {
+  font-weight: 500;
 }
-.intro__panel--dark {
-  z-index: 1;
-  background: #101010;
+.is-intro-playing .intro__content strong {
+  -webkit-animation: intro-text-in 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+          animation: intro-text-in 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 }
-.intro__panel--gray {
-  z-index: 2;
-  background: #777;
+.is-intro-playing .intro__content span {
+  -webkit-animation: intro-text-in 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s both;
+          animation: intro-text-in 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s both;
 }
-.intro__panel--light {
-  z-index: 3;
-  background: #ffffff;
+.is-intro-hiding .intro__content strong {
+  -webkit-animation: intro-text-out 1s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+          animation: intro-text-out 1s cubic-bezier(0.165, 0.84, 0.44, 1) both;
 }
-.is-intro-sweeping .intro__panel--dark {
-  -webkit-animation: intro-panel-sweep 850ms cubic-bezier(0.76, 0, 0.24, 1) 0ms both;
-          animation: intro-panel-sweep 850ms cubic-bezier(0.76, 0, 0.24, 1) 0ms both;
-}
-.is-intro-sweeping .intro__panel--gray {
-  -webkit-animation: intro-panel-sweep 850ms cubic-bezier(0.76, 0, 0.24, 1) 90ms both;
-          animation: intro-panel-sweep 850ms cubic-bezier(0.76, 0, 0.24, 1) 90ms both;
-}
-.is-intro-sweeping .intro__panel--light {
-  -webkit-animation: intro-panel-sweep 850ms cubic-bezier(0.76, 0, 0.24, 1) 180ms both;
-          animation: intro-panel-sweep 850ms cubic-bezier(0.76, 0, 0.24, 1) 180ms both;
+.is-intro-hiding .intro__content span {
+  -webkit-animation: intro-text-out 1s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s both;
+          animation: intro-text-out 1s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s both;
 }
 .is-intro-finished .intro {
   visibility: hidden;
 }
 
-@-webkit-keyframes intro-panel-sweep {
-  0% {
-    -webkit-transform: translateY(105%);
-            transform: translateY(105%);
+@media (max-width: 480px) {
+  .intro__content {
+    gap: 40px;
+    padding-left: 8%;
   }
-  100% {
-    -webkit-transform: translateY(-105%);
-            transform: translateY(-105%);
+  .intro__content strong,
+  .intro__content span {
+    font-size: 15px;
   }
 }
-
-@keyframes intro-panel-sweep {
-  0% {
-    -webkit-transform: translateY(105%);
-            transform: translateY(105%);
+@-webkit-keyframes intro-text-in {
+  to {
+    opacity: 1;
   }
-  100% {
-    -webkit-transform: translateY(-105%);
-            transform: translateY(-105%);
+}
+@keyframes intro-text-in {
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes intro-text-out {
+  from {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translateY(-50px);
+            transform: translateY(-50px);
+  }
+}
+@keyframes intro-text-out {
+  from {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translateY(-50px);
+            transform: translateY(-50px);
+  }
+}
+@-webkit-keyframes intro-background-out {
+  to {
+    -webkit-transform: translateY(-100%);
+            transform: translateY(-100%);
+  }
+}
+@keyframes intro-background-out {
+  to {
+    -webkit-transform: translateY(-100%);
+            transform: translateY(-100%);
   }
 }
 .site-shell {
@@ -309,8 +324,7 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .intro,
   .intro__base,
-  .intro__content,
-  .intro__panel {
+  .intro__content {
     -webkit-animation: none;
             animation: none;
     -webkit-transition-duration: 1ms;

@@ -758,27 +758,19 @@ activeImage.addEventListener(
 
 restoreFromLocation();
 
-let hasPlayedIntro = false;
-
-try {
-  hasPlayedIntro = window.sessionStorage.getItem("wanwang-intro-played") === "true";
-  window.sessionStorage.setItem("wanwang-intro-played", "true");
-} catch {
-  // sessionStorage 被停用時，維持一般 Intro 行為。
-}
-
-if (reduceMotion.matches || hasPlayedIntro) {
-  body.classList.add("is-intro-base-cleared", "is-intro-finished");
+// 每次載入都播放與 Jack Davison 網站相同節奏的開場動畫。
+if (reduceMotion.matches) {
+  body.classList.add("is-intro-finished");
 } else {
-  window.setTimeout(() => {
-    body.classList.add("is-intro-sweeping");
-  }, 1100);
+  window.requestAnimationFrame(() => {
+    body.classList.add("is-intro-playing");
+  });
 
   window.setTimeout(() => {
-    body.classList.add("is-intro-base-cleared");
-  }, 1705);
+    body.classList.add("is-intro-hiding");
+  }, 1700);
 
   window.setTimeout(() => {
     body.classList.add("is-intro-finished");
-  }, 2140);
+  }, 3220);
 }
