@@ -118,6 +118,8 @@ let thumbsReturnFocus = null;
 let historyRestoreScheduled = false;
 let categoryTransitionSequence = 0;
 let indexSelectionSequence = 0;
+let activeImageRequestSequence = 0;
+const preparedSlideImages = new Map();
 
 // THUMBS 專用：保留原始子資料夾結構，並改用 600px WebP 縮圖。
 function thumbPath(imagePath) {
@@ -129,7 +131,12 @@ function thumbPath(imagePath) {
 
 // 手機關閉 THUMBS 前，先讓所選原圖完成載入與解碼，避免短暫露出上一張。
 function prepareSlideImage(imagePath) {
-  return new Promise((resolve) => {
+  const preparedImage = preparedSlideImages.get(imagePath);
+  if (preparedImage) return preparedImage.promise;
+
+  const entry = { status: "loading", promise: null };
+
+  entry.promise = new Promise((resolve) => {
     const image = new Image();
     let hasSettled = false;
 
@@ -137,6 +144,8 @@ function prepareSlideImage(imagePath) {
       if (hasSettled) return;
       hasSettled = true;
       window.clearTimeout(timeoutId);
+      entry.status = didLoad ? "loaded" : "error";
+      if (!didLoad) preparedSlideImages.delete(imagePath);
       resolve(didLoad);
     };
 
@@ -152,8 +161,12 @@ function prepareSlideImage(imagePath) {
       finish(true);
     };
     image.onerror = () => finish(false);
+    image.fetchPriority = "high";
     image.src = imagePath;
   });
+
+  preparedSlideImages.set(imagePath, entry);
+  return entry.promise;
 }
 
 // 網址數字補成兩位
@@ -235,11 +248,25 @@ function preloadAdjacentSlides(index) {
     const adjacentSlide = crossesGroupBoundary
       ? slides[(slides.indexOf(currentSlide) + direction + slides.length) % slides.length]
       : activeSlides[(requestedIndex + activeSlides.length) % activeSlides.length];
-    const adjacentImage = new Image();
+    prepareSlideImage(adjacentSlide.image);
+  });
+}
 
-    adjacentImage.decoding = "async";
-    adjacentImage.fetchPriority = "low";
-    adjacentImage.src = adjacentSlide.image;
+// 手機網路較慢時先顯示輕量 WebP 預覽，原圖完成解碼後再無縫替換。
+function displaySlideImage(slide) {
+  const requestSequence = ++activeImageRequestSequence;
+  const isAlreadyShowingFullImage = activeImage.getAttribute("src") === slide.image;
+  const preparedImage = preparedSlideImages.get(slide.image);
+
+  if (!isAlreadyShowingFullImage && preparedImage?.status !== "loaded") {
+    activeImage.src = thumbPath(slide.image);
+  } else {
+    activeImage.src = slide.image;
+  }
+
+  prepareSlideImage(slide.image).then((didLoad) => {
+    if (!didLoad || requestSequence !== activeImageRequestSequence) return;
+    activeImage.src = slide.image;
   });
 }
 
@@ -273,7 +300,7 @@ function applySlide(index, historyMode = "push") {
       : item.category === slide.category);
   const categoryIndex = categorySlides.indexOf(slide);
 
-  activeImage.src = slide.image;
+  displaySlideImage(slide);
   activeImage.alt = slide.alt;
   activeCaption.textContent = captionFor(activeIndex);
   viewerCursorCategory.textContent = slide.title;
@@ -284,15 +311,7 @@ function applySlide(index, historyMode = "push") {
   thumbsTitle.textContent = slide.title;
   displayedSlide = slide;
 
-  if (activeImage.complete) {
-    preloadAdjacentSlides(appliedIndex);
-  } else {
-    activeImage.addEventListener(
-      "load",
-      () => preloadAdjacentSlides(appliedIndex),
-      { once: true }
-    );
-  }
+  preloadAdjacentSlides(appliedIndex);
 
   document.querySelectorAll("[data-thumb]").forEach((button) => {
     button.classList.toggle(
