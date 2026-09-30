@@ -676,6 +676,8 @@ img {
   display: grid;
   -ms-grid-columns: minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr) 13px minmax(0, 1fr);
   grid-template-columns: repeat(11, minmax(0, 1fr));
+  grid-auto-rows: -webkit-max-content;
+  grid-auto-rows: max-content;
   gap: 13px;
   -ms-flex-line-pack: start;
       align-content: start;
@@ -688,28 +690,28 @@ img {
   padding: 0 6vw 48px;
 }
 .thumbs-grid button {
-  display: -ms-grid;
-  display: grid;
-  place-items: start center;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
   min-width: 0;
-  opacity: 0.82;
   -webkit-transition: opacity 160ms ease, -webkit-transform 160ms ease;
   transition: opacity 160ms ease, -webkit-transform 160ms ease;
   transition: opacity 160ms ease, transform 160ms ease;
   transition: opacity 160ms ease, transform 160ms ease, -webkit-transform 160ms ease;
 }
 .thumbs-grid button:hover, .thumbs-grid button.is-active {
-  opacity: 1;
   -webkit-transform: translateY(-3px);
           transform: translateY(-3px);
 }
 .thumbs-grid img {
   width: 100%;
-  max-width: 140px;
-  height: auto;
-  max-height: none;
-  -o-object-fit: contain;
-     object-fit: contain;
+  height: 100%;
+  aspect-ratio: 1;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
 
 @media (max-width: 1024px) {
@@ -796,10 +798,6 @@ img {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 18px 10px;
   }
-  .thumbs-grid img {
-    max-width: 116px;
-    max-height: 140px;
-  }
 }
 @media (max-width: 480px) {
   :root {
@@ -834,13 +832,6 @@ img {
   }
   .thumbs-grid button {
     width: 100%;
-    height: auto;
-  }
-  .thumbs-grid img {
-    width: 100%;
-    max-width: none;
-    max-height: none;
-    height: auto;
   }
 }
 @media (hover: none), (pointer: coarse) {

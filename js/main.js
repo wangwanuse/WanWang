@@ -1,6 +1,5 @@
 // 作品分類資料。Editorial 依專案再分一層。
 const works = [
-  { title: "Event" },
   { title: "Recent" },
   {
     title: "Editorial",
@@ -14,7 +13,8 @@ const works = [
   { title: "Advertising" },
   { title: "Lookbook" },
   { title: "Beauty" },
-  { title: "Retouch" }
+  { title: "Retouch" },
+  { title: "Event" }
 ];
 
 function numberedSlides({ title, category = title, folder, prefix, count, extension = "jpg", project }) {

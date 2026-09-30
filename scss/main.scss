@@ -629,6 +629,7 @@ img {
   min-height: 0;
   display: grid;
   grid-template-columns: repeat(11, minmax(0, 1fr));
+  grid-auto-rows: max-content;
   gap: 13px;
   align-content: start;
   align-items: start;
@@ -637,25 +638,25 @@ img {
   padding: 0 6vw 48px;
 
   button {
-    display: grid;
-    place-items: start center;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
     min-width: 0;
-    opacity: 0.82;
     transition: opacity 160ms ease, transform 160ms ease;
 
     &:hover,
     &.is-active {
-      opacity: 1;
       transform: translateY(-3px);
     }
   }
 
   img {
     width: 100%;
-    max-width: 140px;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: center;
   }
 }
 
@@ -746,11 +747,6 @@ img {
   .thumbs-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 18px 10px;
-
-    img {
-      max-width: 116px;
-      max-height: 140px;
-    }
   }
 }
 
@@ -789,14 +785,6 @@ img {
 
     button {
       width: 100%;
-      height: auto;
-    }
-
-    img {
-      width: 100%;
-      max-width: none;
-      max-height: none;
-      height: auto;
     }
   }
 }
