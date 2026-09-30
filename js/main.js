@@ -222,18 +222,25 @@ function captionFor(index) {
   return `${slide.title} - ${categoryIndex + 1}/${categorySlides.length}`;
 }
 
-// 目前作品顯示後，只在背景準備下一張，避免一開始下載全部作品。
-function preloadNextSlide(index) {
+// 目前作品顯示後，在背景準備前後兩張，讓手機往任一方向切換都不必臨時下載。
+function preloadAdjacentSlides(index) {
   if (activeSlides.length < 2) return;
 
   const currentSlide = activeSlides[index];
-  const nextSlide = index === activeSlides.length - 1 && activeSlides !== slides
-    ? slides[(slides.indexOf(currentSlide) + 1) % slides.length]
-    : activeSlides[(index + 1) % activeSlides.length];
-  const nextImage = new Image();
-  nextImage.decoding = "async";
-  nextImage.fetchPriority = "low";
-  nextImage.src = nextSlide.image;
+
+  [-1, 1].forEach((direction) => {
+    const requestedIndex = index + direction;
+    const crossesGroupBoundary = activeSlides !== slides
+      && (requestedIndex < 0 || requestedIndex >= activeSlides.length);
+    const adjacentSlide = crossesGroupBoundary
+      ? slides[(slides.indexOf(currentSlide) + direction + slides.length) % slides.length]
+      : activeSlides[(requestedIndex + activeSlides.length) % activeSlides.length];
+    const adjacentImage = new Image();
+
+    adjacentImage.decoding = "async";
+    adjacentImage.fetchPriority = "low";
+    adjacentImage.src = adjacentSlide.image;
+  });
 }
 
 function groupKey(slide) {
@@ -278,11 +285,11 @@ function applySlide(index, historyMode = "push") {
   displayedSlide = slide;
 
   if (activeImage.complete) {
-    preloadNextSlide(appliedIndex);
+    preloadAdjacentSlides(appliedIndex);
   } else {
     activeImage.addEventListener(
       "load",
-      () => preloadNextSlide(appliedIndex),
+      () => preloadAdjacentSlides(appliedIndex),
       { once: true }
     );
   }

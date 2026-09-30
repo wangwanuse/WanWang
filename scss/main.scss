@@ -293,6 +293,10 @@ img {
     bottom: var(--footer-height);
     z-index: 5;
     width: 50vw;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
 
     &--prev {
       left: 0;
@@ -779,7 +783,7 @@ img {
 
   .thumbs-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px 12px;
+    gap: 12px;
     padding-right: 24px;
     padding-left: 24px;
 

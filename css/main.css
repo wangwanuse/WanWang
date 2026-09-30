@@ -289,6 +289,13 @@ img {
   bottom: var(--footer-height);
   z-index: 5;
   width: 50vw;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+   -ms-user-select: none;
+       user-select: none;
 }
 .viewer__hit--prev {
   left: 0;
@@ -826,7 +833,7 @@ img {
   .thumbs-grid {
     -ms-grid-columns: minmax(0, 1fr) 12px minmax(0, 1fr) 12px minmax(0, 1fr);
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px 12px;
+    gap: 12px;
     padding-right: 24px;
     padding-left: 24px;
   }
