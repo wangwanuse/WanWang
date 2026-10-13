@@ -59,7 +59,6 @@ editorialSlides.splice(42, 0,
 );
 
 const slides = [
-  ...numberedSlides({ title: "Event", folder: "Event", prefix: "Event", count: 13 }),
   ...numberedSlides({ title: "Recent", folder: "Recent", prefix: "Recent", count: 21 }),
   ...editorialSlides,
   ...numberedSlides({ title: "Still life", folder: "Still life", prefix: "Still life", count: 32 }),
@@ -81,7 +80,8 @@ const slides = [
     title: "Retouch", category: "Retouch",
     image: `images/Retouch/Retouch_${file}`,
     alt: `Retouch work ${index + 1}`
-  }))
+  })),
+  ...numberedSlides({ title: "Event", folder: "Event", prefix: "Event", count: 13 })
 ];
 
 let activeIndex = 0;

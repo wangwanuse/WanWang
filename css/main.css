@@ -748,6 +748,9 @@ img {
     top: 0;
     bottom: auto;
   }
+  .bottom-nav button {
+    font-size: 15px;
+  }
   .viewer__hit {
     top: var(--footer-height);
     bottom: 0;

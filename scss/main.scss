@@ -680,6 +680,10 @@ img {
   .bottom-nav {
     top: 0;
     bottom: auto;
+
+    button {
+      font-size: 15px;
+    }
   }
 
   .viewer__hit {
