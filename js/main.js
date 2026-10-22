@@ -108,6 +108,24 @@ const viewerCursorCount = viewerCursor.querySelector(".viewer__cursor-count");
 const categoryMask = document.querySelector(".viewer__category-mask");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const categoryTransitionDuration = 540;
+
+// 手機與平板的導覽及分類文字，依每張圖片實際顯示邊界貼齊排列。
+function syncMobileViewerChrome() {
+  if (!window.matchMedia("(max-width: 1024px)").matches) {
+    document.documentElement.style.removeProperty("--viewer-image-top");
+    document.documentElement.style.removeProperty("--viewer-image-bottom");
+    return;
+  }
+
+  const imageBounds = activeImage.getBoundingClientRect();
+  document.documentElement.style.setProperty("--viewer-image-top", `${imageBounds.top}px`);
+  document.documentElement.style.setProperty("--viewer-image-bottom", `${imageBounds.bottom}px`);
+}
+
+function queueMobileViewerChromeSync() {
+  window.requestAnimationFrame(syncMobileViewerChrome);
+}
+
 let displayedSlide = activeSlides[0];
 let isCategoryTransitioning = false;
 let hasRenderedThumbs = false;
@@ -759,6 +777,10 @@ window.addEventListener("hashchange", scheduleHistoryRestore);
 
 renderWorkIndex();
 
+activeImage.addEventListener("load", queueMobileViewerChromeSync);
+window.addEventListener("resize", queueMobileViewerChromeSync);
+window.visualViewport?.addEventListener("resize", queueMobileViewerChromeSync);
+
 // 首張圖片開始下載後，後續輪播圖片恢復一般下載優先度。
 activeImage.addEventListener(
   "load",
@@ -769,6 +791,7 @@ activeImage.addEventListener(
 );
 
 restoreFromLocation();
+queueMobileViewerChromeSync();
 
 // 每次載入都播放與 Jack Davison 網站相同節奏的開場動畫。
 if (reduceMotion.matches) {

@@ -688,7 +688,7 @@ img {
 }
 
 .thumbs-grid {
-  --thumb-row-height: clamp(72px, 7.5vw, 120px);
+  --thumb-row-height: 200px;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -744,13 +744,16 @@ img {
     --panel-width: 100vw;
     --footer-height: 100px;
     --viewer-width: 86vw;
+    --viewer-chrome-gap: clamp(20px, 3svh, 42px);
+    --viewer-label-height: 20px;
   }
   body {
     font-size: 12px;
   }
   .bottom-nav {
-    top: 0;
+    top: calc(var(--viewer-image-top, 50svh) - var(--viewer-chrome-gap) - var(--viewer-label-height));
     bottom: auto;
+    height: var(--viewer-label-height);
   }
   .bottom-nav button {
     font-size: 15px;
@@ -778,7 +781,8 @@ img {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 0;
+    top: calc(var(--viewer-image-bottom, 50svh) + var(--viewer-chrome-gap));
+    bottom: auto;
     z-index: 4;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -789,7 +793,7 @@ img {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
-    height: var(--footer-height);
+    height: var(--viewer-label-height);
     margin: 0;
     font-variant-numeric: tabular-nums;
     pointer-events: none;
@@ -879,7 +883,7 @@ img {
     --footer-height: 40px;
   }
   .bottom-nav {
-    top: 0;
+    top: calc(var(--viewer-image-top, 50svh) - var(--viewer-chrome-gap) - var(--viewer-label-height));
     bottom: auto;
   }
   .viewer__hit {
