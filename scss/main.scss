@@ -639,6 +639,7 @@ img {
   gap: 6.5px;
   align-content: start;
   align-items: start;
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 0 6vw 48px;
@@ -647,6 +648,7 @@ img {
     display: block;
     flex: 0 0 auto;
     width: auto;
+    max-width: 100%;
     height: var(--thumb-row-height);
     aspect-ratio: 1;
     min-width: 0;

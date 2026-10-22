@@ -705,6 +705,7 @@ img {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: start;
+  overflow-x: hidden;
   overflow-y: auto;
   -ms-scroll-chaining: none;
       overscroll-behavior: contain;
@@ -716,6 +717,7 @@ img {
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
   width: auto;
+  max-width: 100%;
   height: var(--thumb-row-height);
   aspect-ratio: 1;
   min-width: 0;
