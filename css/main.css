@@ -856,7 +856,7 @@ img {
   }
   .thumbs-grid {
     --thumb-row-height: 140px;
-    gap: 6px;
+    gap: 3px;
     padding-right: 24px;
     padding-left: 24px;
   }
