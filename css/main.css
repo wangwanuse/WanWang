@@ -626,12 +626,12 @@ img {
   place-items: start center;
   overflow: hidden;
   padding: 85px 0 0;
-  background: rgba(255, 255, 255, 0.96);
-  opacity: 0;
+  background: #fff;
+  opacity: 1;
   visibility: hidden;
   pointer-events: none;
-  -webkit-transition: opacity 420ms ease, visibility 0s linear 420ms;
-  transition: opacity 420ms ease, visibility 0s linear 420ms;
+  -webkit-transition: visibility 0s;
+  transition: visibility 0s;
 }
 .is-thumbs-open .thumbs-overlay {
   opacity: 1;
@@ -641,6 +641,7 @@ img {
           transition-delay: 0s;
 }
 .thumbs-overlay__ghost {
+  display: none;
   position: fixed;
   left: 50%;
   top: 50%;

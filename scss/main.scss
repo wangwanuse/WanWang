@@ -580,11 +580,11 @@ img {
   place-items: start center;
   overflow: hidden;
   padding: 85px 0 0;
-  background: rgba($color-bg, 0.96);
-  opacity: 0;
+  background: $color-bg;
+  opacity: 1;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 420ms ease, visibility 0s linear 420ms;
+  transition: visibility 0s;
 
   .is-thumbs-open & {
     opacity: 1;
@@ -594,6 +594,7 @@ img {
   }
 
   &__ghost {
+    display: none;
     position: fixed;
     left: 50%;
     top: 50%;
