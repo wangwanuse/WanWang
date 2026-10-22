@@ -571,6 +571,18 @@ function renderThumbs() {
     image.loading = "lazy";
     image.decoding = "async";
 
+    const syncThumbAspectRatio = () => {
+      if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+        button.style.aspectRatio = `${image.naturalWidth} / ${image.naturalHeight}`;
+      }
+    };
+
+    if (image.complete) {
+      syncThumbAspectRatio();
+    } else {
+      image.addEventListener("load", syncThumbAspectRatio, { once: true });
+    }
+
     button.append(image);
 
     button.addEventListener("click", async () => {
